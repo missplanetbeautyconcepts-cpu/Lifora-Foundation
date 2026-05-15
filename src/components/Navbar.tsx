@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/helpers';
 import { useScrollPosition } from '@/hooks/useScrollPosition';
 import DonateButton from './DonateButton';
 import { motion, AnimatePresence } from 'motion/react';
