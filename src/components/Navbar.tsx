@@ -35,7 +35,7 @@ export default function Navbar() {
               referrerPolicy="no-referrer"
             />
           </div>
-          <span className="font-bold text-mao-dark text-xl tracking-tight hidden sm:inline uppercase">LIFORA FOUNDATION</span>
+          <span className="font-bold text-mao-dark text-lg sm:text-xl tracking-tight uppercase transition-all duration-300">LIFORA FOUNDATION</span>
         </Link>
 
         {/* Desktop Links */}
