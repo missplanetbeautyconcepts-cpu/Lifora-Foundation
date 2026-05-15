@@ -45,10 +45,6 @@ export default function MissionSection() {
                 alt="Community meeting"
                 className="relative rounded-2xl w-full h-[500px] object-cover shadow-2xl"
               />
-              <div className="absolute -bottom-8 -right-8 bg-white p-8 rounded-2xl shadow-xl hidden md:block max-w-xs border border-gray-100">
-                <p className="text-mao-blue font-bold text-xl italic mb-2">"Together, we are building a more resilient and diverse Canada."</p>
-                <p className="text-mao-muted text-sm font-semibold">— Dr. Samuel Aden, Founder</p>
-              </div>
             </div>
           </AnimatedSection>
         </div>
