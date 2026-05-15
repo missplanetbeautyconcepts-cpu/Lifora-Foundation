@@ -1,5 +1,5 @@
 import { ChevronRight } from 'lucide-react';
-import { cn } from '@/lib/helpers';
+import { cn } from '@/lib/utils';
 
 interface DonateButtonProps {
   variant?: 'primary' | 'white' | 'outline';

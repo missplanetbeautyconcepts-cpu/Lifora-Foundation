@@ -1,5 +1,5 @@
 import { LucideIcon, ArrowRight } from 'lucide-react';
-import { cn } from '@/lib/helpers';
+import { cn } from '@/lib/utils';
 
 interface ContentCardProps {
   title: string;
