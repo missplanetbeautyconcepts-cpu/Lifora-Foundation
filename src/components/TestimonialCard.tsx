@@ -1,5 +1,5 @@
 import { Quote } from 'lucide-react';
-import { cn } from '@/lib/cn';
+import { cn } from '@/lib/utils';
 
 interface TestimonialCardProps {
   quote: string;
