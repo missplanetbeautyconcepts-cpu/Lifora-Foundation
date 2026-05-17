@@ -8,19 +8,22 @@ const services = [
     title: 'Immediate Relief',
     description: 'Essential support including food, clothing, and basic care for individuals facing hardship.',
     icon: Heart,
-    linkText: 'Learn More'
+    linkText: 'Learn More',
+    linkPath: '/about'
   },
   {
     title: 'Restoration & Stability',
     description: 'Connecting individuals with resources, safe environments, and community support systems.',
     icon: Home,
-    linkText: 'Learn More'
+    linkText: 'Learn More',
+    linkPath: '/about'
   },
   {
     title: 'Empowerment & Growth',
     description: 'Skill development, access to information, and pathways toward independence.',
     icon: Rocket,
-    linkText: 'Learn More'
+    linkText: 'Learn More',
+    linkPath: '/about'
   }
 ];
 

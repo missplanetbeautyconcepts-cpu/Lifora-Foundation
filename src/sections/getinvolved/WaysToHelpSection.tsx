@@ -6,21 +6,18 @@ import { Heart, Users, HandHeart } from 'lucide-react';
 const ways = [
   {
     title: 'Support Lifora',
-    description: 'Your support helps us extend our reach and deepen our impact. Every contribution plays a role in changing lives.',
+    description: 'Your support helps us extend our reach and deepen our impact. Whether through donations, partnerships, or advocacy, every contribution plays a role in changing lives.',
     icon: Heart,
-    linkText: 'Support the Mission'
   },
   {
     title: 'Volunteer',
-    description: 'Join us in making a direct impact. We welcome individuals passionate about giving back and supporting communities.',
+    description: 'Join us in making a direct impact. Lifora welcomes individuals who are passionate about giving back and supporting communities in meaningful ways.',
     icon: HandHeart,
-    linkText: 'Join as Volunteer'
   },
   {
     title: 'Partner With Us',
-    description: 'We collaborate with organizations, businesses, and leaders to expand our reach and deliver greater impact together.',
+    description: 'We collaborate with organizations, businesses, and community leaders to expand our reach and deliver greater impact together.',
     icon: Users,
-    linkText: 'Become a Partner'
   }
 ];
 

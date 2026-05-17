@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Mail, Phone, MapPin, Globe, MessageSquare, Share2, ChevronRight } from 'lucide-react';
+import { Mail, Phone, MapPin, ChevronRight } from 'lucide-react';
 
 export default function Footer() {
   return (
@@ -23,9 +23,34 @@ export default function Footer() {
               Lifora Foundation is built on the belief that every life holds value and potential. We exist to support vulnerable individuals and underserved communities through meaningful, consistent action.
             </p>
             <div className="flex items-center gap-4">
-              <a href="#" className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-mao-blue hover:text-white transition-all"><Globe className="w-4 h-4" /></a>
-              <a href="#" className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-mao-blue hover:text-white transition-all"><MessageSquare className="w-4 h-4" /></a>
-              <a href="#" className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-mao-blue hover:text-white transition-all"><Share2 className="w-4 h-4" /></a>
+              <a 
+                href="https://www.facebook.com/share/1E7jzDFp7b/?mibextid=wwXIfr" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-mao-blue hover:text-white transition-all overflow-hidden p-1.5"
+                title="Facebook"
+              >
+                <img 
+                  src="https://raw.githubusercontent.com/perfectgbakidz/hostingimage/refs/heads/main/faceboook.png" 
+                  alt="Facebook" 
+                  className="w-full h-full object-contain"
+                  referrerPolicy="no-referrer"
+                />
+              </a>
+              <a 
+                href="https://www.instagram.com/Liforacanada" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-mao-blue hover:text-white transition-all overflow-hidden p-1.5"
+                title="Instagram"
+              >
+                <img 
+                  src="https://raw.githubusercontent.com/perfectgbakidz/hostingimage/refs/heads/main/instagra.jpg" 
+                  alt="Instagram" 
+                  className="w-full h-full object-contain rounded-sm"
+                  referrerPolicy="no-referrer"
+                />
+              </a>
             </div>
           </div>
 
@@ -33,7 +58,7 @@ export default function Footer() {
           <div>
             <h4 className="text-white font-bold mb-6">Quick Links</h4>
             <ul className="space-y-4">
-              {['Home', 'About Us', 'Programs', 'Impact', 'Get Involved', 'Contact'].map((link) => (
+              {['Home', 'About Us', 'Get Involved', 'Contact'].map((link) => (
                 <li key={link}>
                   <Link
                     to={link === 'Home' ? '/' : `/${link.toLowerCase().replace(' ', '-')}`}
@@ -53,15 +78,15 @@ export default function Footer() {
             <ul className="space-y-4">
               <li className="flex items-start gap-3 text-sm">
                 <MapPin className="w-5 h-5 text-mao-blue shrink-0" />
-                <span>123 Inclusion Street, Suite 400<br />Toronto, ON M5V 2H1</span>
+                <span>150 transcona Blvd</span>
               </li>
               <li className="flex items-center gap-3 text-sm">
                 <Phone className="w-5 h-5 text-mao-blue shrink-0" />
-                <span>(416) 555-0123</span>
+                <span>431-788-2919</span>
               </li>
               <li className="flex items-center gap-3 text-sm">
                 <Mail className="w-5 h-5 text-mao-blue shrink-0" />
-                <span>info@lifora.org</span>
+                <span>Liforacanada@gmail.com</span>
               </li>
             </ul>
           </div>
@@ -82,9 +107,9 @@ export default function Footer() {
         <div className="pt-8 text-center text-xs opacity-50 flex flex-col md:flex-row justify-between items-center gap-4">
           <p>© {new Date().getFullYear()} Lifora Foundation. All rights reserved.</p>
           <div className="flex items-center gap-6">
-            <a href="#" className="hover:underline">Privacy Policy</a>
-            <a href="#" className="hover:underline">Terms of Service</a>
-            <a href="#" className="hover:underline">Cookie Policy</a>
+            <Link to="/privacy-policy" className="hover:underline">Privacy Policy</Link>
+            <Link to="/terms-of-service" className="hover:underline">Terms of Service</Link>
+            <Link to="/cookie-policy" className="hover:underline">Cookie Policy</Link>
           </div>
         </div>
       </div>

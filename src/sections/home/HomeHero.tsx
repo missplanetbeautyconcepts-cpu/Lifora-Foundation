@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import DonateButton from '@/components/DonateButton';
 import AnimatedSection from '@/components/AnimatedSection';
 import { motion } from 'motion/react';
@@ -12,6 +13,7 @@ export default function HomeHero() {
           src="https://images.unsplash.com/photo-1529070538774-1843cb3265df?auto=format&fit=crop&q=80&w=2000"
           alt="Diverse community"
           className="w-full h-full object-cover opacity-40"
+          referrerPolicy="no-referrer"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-mao-dark via-mao-dark/80 to-transparent" />
       </div>
@@ -38,9 +40,12 @@ export default function HomeHero() {
 
             <div className="flex flex-col sm:flex-row gap-4">
               <DonateButton className="text-lg px-8 py-4" />
-              <button className="px-8 py-4 rounded-pill border-2 border-white/30 text-white font-bold hover:bg-white/10 transition-all">
+              <Link 
+                to="/get-involved"
+                className="px-8 py-4 rounded-pill border-2 border-white/30 text-white font-bold hover:bg-white/10 transition-all text-center"
+              >
                 Partner With Us
-              </button>
+              </Link>
             </div>
 
             {/* Quick Stats Overlay - Desktop Only */}

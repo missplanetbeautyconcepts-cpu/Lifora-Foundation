@@ -13,7 +13,7 @@ export default function ContactFormSection() {
               centered
             />
 
-            <form className="mt-12 space-y-8" onSubmit={(e) => { e.preventDefault(); alert('Message sent! Thank you for contacting MAO Canada.'); }}>
+            <form className="mt-12 space-y-8" onSubmit={(e) => { e.preventDefault(); console.log('Message sent!'); }}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="space-y-2">
                   <label className="text-sm font-bold text-mao-dark uppercase tracking-wider">Your Name</label>

@@ -1,6 +1,6 @@
 import PageHero from '@/components/PageHero';
 import WaysToHelpSection from '@/sections/getinvolved/WaysToHelpSection';
-import JoinFormSection from '@/sections/getinvolved/JoinFormSection';
+import ContactInfoSection from '@/sections/shared/ContactInfoSection';
 
 export default function GetInvolved() {
   return (
@@ -11,7 +11,7 @@ export default function GetInvolved() {
         breadcrumbs={['Home', 'Get Involved']}
       />
       <WaysToHelpSection />
-      <JoinFormSection />
+      <ContactInfoSection />
     </main>
   );
 }

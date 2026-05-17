@@ -9,8 +9,6 @@ import { motion, AnimatePresence } from 'motion/react';
 const navLinks = [
   { name: 'Home', path: '/' },
   { name: 'About Us', path: '/about' },
-  { name: 'Programs', path: '/programs' },
-  { name: 'Impact', path: '/impact' },
   { name: 'Get Involved', path: '/get-involved' },
   { name: 'Contact', path: '/contact' },
 ];
@@ -35,7 +33,7 @@ export default function Navbar() {
               referrerPolicy="no-referrer"
             />
           </div>
-          <span className="font-bold text-mao-dark text-lg sm:text-xl tracking-tight uppercase transition-all duration-300">LIFORA FOUNDATION</span>
+          <span className="font-bold text-mao-dark text-base sm:text-lg lg:text-xl tracking-tight uppercase transition-all duration-300 whitespace-nowrap">LIFORA FOUNDATION</span>
         </Link>
 
         {/* Desktop Links */}

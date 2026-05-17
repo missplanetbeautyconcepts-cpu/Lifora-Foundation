@@ -1,7 +1,7 @@
 import PageHero from '@/components/PageHero';
-import MissionSection from '@/sections/shared/MissionSection';
+import WhoWeAreSection from '@/sections/about/WhoWeAreSection';
+import ValuesSection from '@/sections/about/ValuesSection';
 import WhoWeServeSection from '@/sections/about/WhoWeServeSection';
-import HowWeWorkSection from '@/sections/about/HowWeWorkSection';
 
 export default function About() {
   return (
@@ -11,9 +11,9 @@ export default function About() {
         subtitle="Lifora exists to support vulnerable individuals and underserved communities through meaningful, consistent action at the intersection of compassion and structure."
         breadcrumbs={['Home', 'About Us']}
       />
-      <MissionSection />
+      <WhoWeAreSection />
+      <ValuesSection />
       <WhoWeServeSection />
-      <HowWeWorkSection />
     </main>
   );
 }
