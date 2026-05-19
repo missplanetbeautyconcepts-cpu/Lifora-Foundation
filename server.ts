@@ -10,9 +10,9 @@ dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Initialize Stripe with a stable API version
+// Initialize Stripe with the same version as your dashboard
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
-  apiVersion: '2024-04-10' as any,
+  apiVersion: '2026-04-22.dahlia',
 });
 
 async function startServer() {
@@ -24,49 +24,49 @@ async function startServer() {
     const sig = req.headers['stripe-signature'];
     const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
+    if (!webhookSecret) {
+      console.error('❌ Webhook Secret is missing in your .env file!');
+      return res.status(400).send('Webhook secret not configured');
+    }
+
     let event;
 
     try {
-      if (!sig || !webhookSecret) {
-        console.error('❌ Webhook Error: Missing signature or STRIPE_WEBHOOK_SECRET in .env');
-        return res.status(400).send('Webhook configuration missing');
-      }
-      
-      // Verification ensures the request actually came from Stripe
-      event = stripe.webhooks.constructEvent(req.body, sig, webhookSecret);
+      event = stripe.webhooks.constructEvent(req.body, sig!, webhookSecret);
     } catch (err: any) {
-      console.error(`⚠️ Webhook signature verification failed: ${err.message}`);
+      console.error(`⚠️  Webhook Signature Verification Failed: ${err.message}`);
       return res.status(400).send(`Webhook Error: ${err.message}`);
     }
 
-    console.log(`🔔 Webhook received: ${event.type}`);
+    console.log(`✅ Webhook Event Verified: ${event.type}`);
 
     try {
       switch (event.type) {
         case 'payment_intent.succeeded': {
           const pi = event.data.object as Stripe.PaymentIntent;
-          console.log(`💰 One-time payment succeeded: ${pi.id}`);
+          console.log(`💰 [Success] One-time payment for ${pi.amount/100} ${pi.currency.toUpperCase()}`);
           break;
         }
         case 'invoice.payment_succeeded': {
           const invoice = event.data.object as any;
-          console.log(`📈 Subscription payment succeeded for invoice: ${invoice.id}`);
-          // This is where you'd update your DB to mark the user as 'Active'
+          console.log(`📈 [Success] Subscription renewal for ${invoice.customer_email}`);
+          // Update customer status to 'Active' in your DB here
           break;
         }
         case 'invoice.payment_failed': {
           const invoice = event.data.object as any;
-          console.error(`🚨 Recurring payment FAILED for: ${invoice.customer_email}`);
+          console.error(`🚨 [Failed] Payment for ${invoice.customer_email}`);
+          // Send reminder email or deactivate status
           break;
         }
         case 'customer.subscription.deleted': {
           const subscription = event.data.object as Stripe.Subscription;
-          console.log(`🗑️ Subscription cancelled: ${subscription.id}`);
+          console.log(`🗑️ [Cancelled] Subscription ${subscription.id}`);
           break;
         }
       }
     } catch (err: any) {
-      console.error('Error handling webhook event:', err);
+      console.error('Error processing event logic:', err);
     }
 
     res.json({ received: true });
