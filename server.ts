@@ -10,22 +10,16 @@ dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Initialize Stripe with a stable API version
+// Initialize Stripe with the latest API version and proper configuration
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
-  apiVersion: '2024-04-10' as any,
+  apiVersion: '2024-04-10' as any, // Bypass strict type check for specific version
 });
 
 async function startServer() {
   const app = express();
   const PORT = 3000;
 
-  // Request logging for EVERY request
-  app.use((req, res, next) => {
-    console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
-    next();
-  });
-
-  // Webhook endpoint: MUST be defined before express.json()
+  // Webhook endpoint must come BEFORE express.json() to handle raw body
   app.post('/api/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
     const sig = req.headers['stripe-signature'];
     const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
@@ -34,60 +28,68 @@ async function startServer() {
 
     try {
       if (!sig || !webhookSecret) {
-        console.error('❌ Webhook Error: Missing signature or STRIPE_WEBHOOK_SECRET in .env');
-        return res.status(400).send('Webhook configuration missing');
+        throw new Error('Missing stripe signature or webhook secret');
       }
-      
-      // Verification ensures the request actually came from Stripe
       event = stripe.webhooks.constructEvent(req.body, sig, webhookSecret);
     } catch (err: any) {
-      console.error(`⚠️ Webhook signature verification failed: ${err.message}`);
+      console.error(`⚠️  Webhook signature verification failed: ${err.message}`);
       return res.status(400).send(`Webhook Error: ${err.message}`);
     }
 
-    console.log(`🔔 Webhook received: ${event.type}`);
-
+    // Handle the event
     try {
       switch (event.type) {
         case 'payment_intent.succeeded': {
-          const pi = event.data.object as Stripe.PaymentIntent;
-          console.log(`💰 One-time payment succeeded: ${pi.id}`);
+          const paymentIntent = event.data.object as Stripe.PaymentIntent;
+          console.log(`✅ PaymentIntent Succeeded: ${paymentIntent.id}`);
+          // Fulfill one-time purchase here
+          // e.g., update database, send confirmation email
+          break;
+        }
+        case 'payment_intent.payment_failed': {
+          const paymentIntent = event.data.object as Stripe.PaymentIntent;
+          console.log(`❌ PaymentIntent Failed: ${paymentIntent.id}`);
           break;
         }
         case 'invoice.payment_succeeded': {
-          const invoice = event.data.object as any;
-          console.log(`📈 Subscription payment succeeded for invoice: ${invoice.id}`);
+          const invoice = event.data.object as Stripe.Invoice;
+          console.log(`✅ Invoice Payment Succeeded: ${invoice.id}`);
+          // Fulfill subscription or recurring payment here
+          // This is triggered for every billing cycle
           break;
         }
         case 'invoice.payment_failed': {
-          const invoice = event.data.object as any;
-          console.error(`🚨 Recurring payment FAILED for: ${invoice.customer_email}`);
+          const invoice = event.data.object as Stripe.Invoice;
+          console.log(`❌ Invoice Payment Failed: ${invoice.id}`);
+          // Handle failed renewal
+          break;
+        }
+        case 'customer.subscription.updated': {
+          const subscription = event.data.object as Stripe.Subscription;
+          console.log(`ℹ️  Subscription Updated: ${subscription.id} (Status: ${subscription.status})`);
           break;
         }
         case 'customer.subscription.deleted': {
           const subscription = event.data.object as Stripe.Subscription;
-          console.log(`🗑️ Subscription cancelled: ${subscription.id}`);
+          console.log(`🗑️  Subscription Deleted: ${subscription.id}`);
+          // Revoke access here
           break;
         }
+        default:
+          console.log(`Unhandled event type ${event.type}`);
       }
     } catch (err: any) {
-      console.error('Error handling webhook event:', err);
+      console.error(`Error processing webhook ${event.type}:`, err.message);
     }
 
     res.json({ received: true });
   });
 
-  // Regular JSON parsing for all other routes
+  // Regular JSON parsing for other routes
   app.use(express.json());
 
-  // API Routes Router-like grouping
-  const apiRouter = express.Router();
-
-  apiRouter.get('/health', (req, res) => {
-    res.json({ status: 'ok', time: new Date().toISOString() });
-  });
-
-  apiRouter.get('/exchange-rate', (req, res) => {
+  // Exchange rates for the frontend
+  app.get('/api/exchange-rate', (req, res) => {
     const rates: Record<string, number> = {
       'USD': 1.35,  
       'EUR': 1.45,  
@@ -97,18 +99,16 @@ async function startServer() {
     res.json({ rates, base: 'CAD' });
   });
 
-  apiRouter.post('/donate', async (req, res) => {
-    console.log('--- Received Donation Request ---');
-    console.log('Body:', req.body);
-
+  // Unified Donation Endpoint
+  app.post('/api/donate', async (req, res) => {
     if (!process.env.STRIPE_SECRET_KEY) {
-      console.error('Missing STRIPE_SECRET_KEY');
       return res.status(500).json({ error: 'Stripe Secret Key is missing.' });
     }
 
     try {
       const { amount, frequency, currency, firstName, lastName, email } = req.body;
 
+      // Basic validation
       if (!amount || amount <= 0) return res.status(400).json({ error: 'Invalid amount' });
       if (!email) return res.status(400).json({ error: 'Email is required' });
 
@@ -131,7 +131,7 @@ async function startServer() {
           customer: customer.id,
           receipt_email: email,
           metadata: { frequency, firstName, lastName },
-          setup_future_usage: 'off_session',
+          setup_future_usage: 'off_session', // Optional: save card for later
         });
 
         return res.json({ 
@@ -139,6 +139,10 @@ async function startServer() {
           type: 'payment' 
         });
       } else {
+        // Recurring: Monthly or Yearly
+        
+        // 1. Dynamic Product/Price Setup
+        // In a real prod environment, you'd likely use fixed Price IDs
         let product;
         const products = await stripe.products.list({ limit: 100 });
         product = products.data.find(p => p.name === 'Donation');
@@ -153,6 +157,8 @@ async function startServer() {
           product: product.id,
         });
 
+        // 2. Create Subscription
+        // payment_behavior: 'default_incomplete' ensures we get a PaymentIntent to confirm on the frontend
         const subscription = await stripe.subscriptions.create({
           customer: customer.id,
           items: [{ price: price.id }],
@@ -178,22 +184,6 @@ async function startServer() {
     } catch (error: any) {
       console.error('Stripe /api/donate error:', error);
       res.status(500).json({ error: error.message });
-    }
-  });
-
-  app.use('/api', apiRouter);
-
-  // Catch-all for undefined /api routes to prevent them falling through to Vite
-  app.use('/api/*', (req, res) => {
-    console.warn(`⚠️ 404 on API route: ${req.method} ${req.originalUrl}`);
-    res.status(404).json({ error: 'API route not found' });
-  });
-
-  // Global Error Handler
-  app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
-    console.error('❌ Global Server Error:', err);
-    if (!res.headersSent) {
-      res.status(500).json({ error: err.message || 'Internal Server Error' });
     }
   });
 
