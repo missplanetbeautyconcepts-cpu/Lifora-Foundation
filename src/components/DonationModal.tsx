@@ -89,14 +89,24 @@ function DonationFormInner({
         }),
       });
 
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || errorData.detail?.[0]?.msg || 'Failed to initialize payment');
+      }
+
       const data = await response.json();
-      if (data.error) throw new Error(data.error);
+      const clientSecret = data.clientSecret || data.client_secret;
+
+      if (!clientSecret) {
+        console.error('Donation error: Missing clientSecret in response', data);
+        throw new Error('Payment initialization failed: Missing security token');
+      }
 
       // 3. Confirm Payment
       // confirmPayment works for both One-Time and Subscription (via latest_invoice)
       const { error: confirmError } = await stripe.confirmPayment({
         elements,
-        clientSecret: data.clientSecret,
+        clientSecret,
         confirmParams: {
           return_url: `${window.location.origin}/impact`,
           payment_method_data: {
