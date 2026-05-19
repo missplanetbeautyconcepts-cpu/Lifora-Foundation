@@ -14,6 +14,8 @@ import { useDonation } from '@/context/DonationContext';
 const STRIPE_KEY = (import.meta as any).env.VITE_STRIPE_PUBLISHABLE_KEY;
 const stripePromise = STRIPE_KEY ? loadStripe(STRIPE_KEY) : null;
 
+const API_BASE_URL = 'https://liforefoundation.onrender.com';
+
 type Frequency = 'One Time' | 'Monthly' | 'Yearly';
 type Currency = 'CAD' | 'USD' | 'EUR' | 'GBP';
 
@@ -74,11 +76,11 @@ function DonationFormInner({
 
     try {
       // 2. Create Intent on Server
-      const response = await fetch('/api/donate', {
+      const response = await fetch(`${API_BASE_URL}/api/donate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
-          amount: finalAmount,
+          amount: Math.round(finalAmount * 100),
           frequency, 
           currency,
           firstName,
@@ -335,7 +337,7 @@ export default function DonationModal() {
   const [email, setEmail] = useState('');
 
   useEffect(() => {
-    fetch('/api/exchange-rate')
+    fetch(`${API_BASE_URL}/api/exchange-rate`)
       .then(res => res.json())
       .then(data => setExchangeRates(data.rates))
       .catch(err => console.error("Exchange fetch error", err));
