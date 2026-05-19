@@ -57,7 +57,6 @@ async function startServer() {
         case 'invoice.payment_succeeded': {
           const invoice = event.data.object as any;
           console.log(`📈 Subscription payment succeeded for invoice: ${invoice.id}`);
-          // This is where you'd update your DB to mark the user as 'Active'
           break;
         }
         case 'invoice.payment_failed': {
@@ -78,21 +77,17 @@ async function startServer() {
     res.json({ received: true });
   });
 
-  // Basic health check
-  app.get('/api/health', (req, res) => {
-    res.json({ status: 'ok', environment: process.env.NODE_ENV || 'development' });
-  });
-
-  // Request logging for API routes
-  app.use('/api', (req, res, next) => {
-    console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
-    next();
-  });
-
+  // Regular JSON parsing for all other routes
   app.use(express.json());
 
-  // Exchange rates for the frontend
-  app.get('/api/exchange-rate', (req, res) => {
+  // API Routes Router-like grouping
+  const apiRouter = express.Router();
+
+  apiRouter.get('/health', (req, res) => {
+    res.json({ status: 'ok', time: new Date().toISOString() });
+  });
+
+  apiRouter.get('/exchange-rate', (req, res) => {
     const rates: Record<string, number> = {
       'USD': 1.35,  
       'EUR': 1.45,  
@@ -102,16 +97,18 @@ async function startServer() {
     res.json({ rates, base: 'CAD' });
   });
 
-  // Unified Donation Endpoint
-  app.post('/api/donate', async (req, res) => {
+  apiRouter.post('/donate', async (req, res) => {
+    console.log('--- Received Donation Request ---');
+    console.log('Body:', req.body);
+
     if (!process.env.STRIPE_SECRET_KEY) {
+      console.error('Missing STRIPE_SECRET_KEY');
       return res.status(500).json({ error: 'Stripe Secret Key is missing.' });
     }
 
     try {
       const { amount, frequency, currency, firstName, lastName, email } = req.body;
 
-      // Basic validation
       if (!amount || amount <= 0) return res.status(400).json({ error: 'Invalid amount' });
       if (!email) return res.status(400).json({ error: 'Email is required' });
 
@@ -134,7 +131,7 @@ async function startServer() {
           customer: customer.id,
           receipt_email: email,
           metadata: { frequency, firstName, lastName },
-          setup_future_usage: 'off_session', // Optional: save card for later
+          setup_future_usage: 'off_session',
         });
 
         return res.json({ 
@@ -142,10 +139,6 @@ async function startServer() {
           type: 'payment' 
         });
       } else {
-        // Recurring: Monthly or Yearly
-        
-        // 1. Dynamic Product/Price Setup
-        // In a real prod environment, you'd likely use fixed Price IDs
         let product;
         const products = await stripe.products.list({ limit: 100 });
         product = products.data.find(p => p.name === 'Donation');
@@ -160,8 +153,6 @@ async function startServer() {
           product: product.id,
         });
 
-        // 2. Create Subscription
-        // payment_behavior: 'default_incomplete' ensures we get a PaymentIntent to confirm on the frontend
         const subscription = await stripe.subscriptions.create({
           customer: customer.id,
           items: [{ price: price.id }],
@@ -188,6 +179,14 @@ async function startServer() {
       console.error('Stripe /api/donate error:', error);
       res.status(500).json({ error: error.message });
     }
+  });
+
+  app.use('/api', apiRouter);
+
+  // Catch-all for undefined /api routes to prevent them falling through to Vite
+  app.use('/api/*', (req, res) => {
+    console.warn(`⚠️ 404 on API route: ${req.method} ${req.originalUrl}`);
+    res.status(404).json({ error: 'API route not found' });
   });
 
   // Global Error Handler
