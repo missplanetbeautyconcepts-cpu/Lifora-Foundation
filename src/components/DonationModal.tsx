@@ -74,6 +74,8 @@ function DonationFormInner({
 
     try {
       // 2. Create Intent on Server
+      console.log('Sending donation request...', { amount: finalAmount, frequency, currency });
+      
       const response = await fetch('/api/donate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -87,8 +89,18 @@ function DonationFormInner({
         }),
       });
 
+      if (!response.ok) {
+        const text = await response.text();
+        console.error('Server responded with error:', response.status, text);
+        try {
+          const errorData = JSON.parse(text);
+          throw new Error(errorData.error || `Server error: ${response.status}`);
+        } catch (e) {
+          throw new Error(`Server error (${response.status}): ${text.substring(0, 50)}...`);
+        }
+      }
+
       const data = await response.json();
-      if (data.error) throw new Error(data.error);
 
       // 3. Confirm Payment
       // confirmPayment works for both One-Time and Subscription (via latest_invoice)

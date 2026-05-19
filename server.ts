@@ -19,6 +19,12 @@ async function startServer() {
   const app = express();
   const PORT = 3000;
 
+  // Request logging for EVERY request
+  app.use((req, res, next) => {
+    console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
+    next();
+  });
+
   // Webhook endpoint: MUST be defined before express.json()
   app.post('/api/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
     const sig = req.headers['stripe-signature'];
@@ -70,6 +76,17 @@ async function startServer() {
     }
 
     res.json({ received: true });
+  });
+
+  // Basic health check
+  app.get('/api/health', (req, res) => {
+    res.json({ status: 'ok', environment: process.env.NODE_ENV || 'development' });
+  });
+
+  // Request logging for API routes
+  app.use('/api', (req, res, next) => {
+    console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
+    next();
   });
 
   app.use(express.json());
@@ -170,6 +187,14 @@ async function startServer() {
     } catch (error: any) {
       console.error('Stripe /api/donate error:', error);
       res.status(500).json({ error: error.message });
+    }
+  });
+
+  // Global Error Handler
+  app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+    console.error('❌ Global Server Error:', err);
+    if (!res.headersSent) {
+      res.status(500).json({ error: err.message || 'Internal Server Error' });
     }
   });
 
