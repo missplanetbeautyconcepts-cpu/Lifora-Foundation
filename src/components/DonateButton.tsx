@@ -1,5 +1,6 @@
 import { ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useDonation } from '@/context/DonationContext';
 
 interface DonateButtonProps {
   variant?: 'primary' | 'white' | 'outline';
@@ -7,6 +8,8 @@ interface DonateButtonProps {
 }
 
 export default function DonateButton({ variant = 'primary', className }: DonateButtonProps) {
+  const { openModal } = useDonation();
+  
   const variants = {
     primary: 'bg-mao-gold text-white hover:bg-opacity-90 shadow-button hover:shadow-button-hover',
     white: 'bg-white text-mao-blue hover:bg-gray-50',
@@ -15,6 +18,7 @@ export default function DonateButton({ variant = 'primary', className }: DonateB
 
   return (
     <button
+      onClick={openModal}
       className={cn(
         'inline-flex items-center gap-2 px-6 py-2.5 rounded-pill font-semibold transition-all duration-300',
         variants[variant],

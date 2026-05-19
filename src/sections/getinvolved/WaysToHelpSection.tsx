@@ -2,6 +2,7 @@ import SectionHeader from '@/components/SectionHeader';
 import ContentCard from '@/components/ContentCard';
 import AnimatedSection from '@/components/AnimatedSection';
 import { Heart, Users, HandHeart } from 'lucide-react';
+import { useDonation } from '@/context/DonationContext';
 
 const ways = [
   {
@@ -22,6 +23,8 @@ const ways = [
 ];
 
 export default function WaysToHelpSection() {
+  const { openModal } = useDonation();
+  
   return (
     <section className="py-24 bg-white">
       <div className="max-w-7xl mx-auto px-4">
@@ -34,7 +37,9 @@ export default function WaysToHelpSection() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {ways.map((way, idx) => (
             <AnimatedSection key={way.title} delay={idx * 0.1}>
-              <ContentCard {...way} className="bg-mao-blue-light/20 border-mao-blue-light/40" />
+              <div onClick={openModal} className="cursor-pointer h-full">
+                <ContentCard {...way} className="bg-mao-blue-light/20 border-mao-blue-light/40 hover:border-mao-gold transition-colors" />
+              </div>
             </AnimatedSection>
           ))}
         </div>
