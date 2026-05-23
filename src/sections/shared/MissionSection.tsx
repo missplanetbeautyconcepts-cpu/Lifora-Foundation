@@ -1,8 +1,46 @@
 import SectionHeader from '@/components/SectionHeader';
 import AnimatedSection from '@/components/AnimatedSection';
-import { Target, Users, BookOpen, Heart } from 'lucide-react';
+import { Target, Users, BookOpen, Heart, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { AnimatePresence, motion } from 'motion/react';
+
+const IMAGES = [
+  "https://raw.githubusercontent.com/perfectgbakidz/hostingimage/refs/heads/main/87e708b0-8271-40ee-bd30-885f5b646ad6.jpg",
+  "https://raw.githubusercontent.com/perfectgbakidz/hostingimage/refs/heads/main/67bc735e-fe9b-464b-a2c4-623b2aaf1909.jpg",
+  "https://raw.githubusercontent.com/perfectgbakidz/hostingimage/refs/heads/main/8f873da1-0c0f-4614-a8d3-f07a21860981.jpg"
+];
+
+const slideVariants = {
+  enter: (direction: number) => ({
+    x: direction > 0 ? '100%' : '-100%',
+    opacity: 0
+  }),
+  center: {
+    x: '0%',
+    opacity: 1
+  },
+  exit: (direction: number) => ({
+    x: direction < 0 ? '100%' : '-100%',
+    opacity: 0
+  })
+};
 
 export default function MissionSection() {
+  const [page, setPage] = useState(0);
+  const [direction, setDirection] = useState(0);
+
+  const paginate = (newDirection: number) => {
+    setDirection(newDirection);
+    setPage((prev) => (prev + newDirection + IMAGES.length) % IMAGES.length);
+  };
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      paginate(1);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [page]);
+
   return (
     <section className="py-24 bg-mao-cream">
       <div className="max-w-7xl mx-auto px-4">
@@ -39,11 +77,63 @@ export default function MissionSection() {
           <AnimatedSection delay={0.2}>
             <div className="relative">
               <div className="absolute -inset-4 bg-mao-gold/20 rounded-3xl -rotate-2" />
-              <img
-                src="https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?auto=format&fit=crop&q=80&w=1000"
-                alt="Community meeting"
-                className="relative rounded-2xl w-full h-[500px] object-cover shadow-2xl"
-              />
+              <div className="relative rounded-2xl w-full h-[500px] overflow-hidden shadow-2xl bg-gray-100 group">
+                <AnimatePresence initial={false} custom={direction}>
+                  <motion.img
+                    key={page}
+                    src={IMAGES[page]}
+                    custom={direction}
+                    variants={slideVariants}
+                    initial="enter"
+                    animate="center"
+                    exit="exit"
+                    transition={{
+                      x: { type: "spring", stiffness: 300, damping: 30 },
+                      opacity: { duration: 0.25 }
+                    }}
+                    alt={`Community activity slide ${page + 1}`}
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                </AnimatePresence>
+
+                {/* Left navigation arrow */}
+                <button
+                  type="button"
+                  onClick={() => paginate(-1)}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white/80 hover:bg-white hover:scale-105 text-mao-dark md:opacity-0 md:group-hover:opacity-100 flex items-center justify-center shadow-md transition-all cursor-pointer"
+                  aria-label="Previous image"
+                >
+                  <ChevronLeft className="w-6 h-6" />
+                </button>
+
+                {/* Right navigation arrow */}
+                <button
+                  type="button"
+                  onClick={() => paginate(1)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white/80 hover:bg-white hover:scale-105 text-mao-dark md:opacity-0 md:group-hover:opacity-100 flex items-center justify-center shadow-md transition-all cursor-pointer"
+                  aria-label="Next image"
+                >
+                  <ChevronRight className="w-6 h-6" />
+                </button>
+
+                {/* Carousel position dots */}
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 flex gap-2">
+                  {IMAGES.map((_, index) => (
+                    <button
+                      key={index}
+                      type="button"
+                      onClick={() => {
+                        setDirection(index > page ? 1 : -1);
+                        setPage(index);
+                      }}
+                      className={`w-2 h-2 rounded-full transition-all cursor-pointer ${
+                        index === page ? 'bg-mao-blue w-6' : 'bg-white/50 hover:bg-white'
+                      }`}
+                      aria-label={`Go to slide ${index + 1}`}
+                    />
+                  ))}
+                </div>
+              </div>
             </div>
           </AnimatedSection>
         </div>
