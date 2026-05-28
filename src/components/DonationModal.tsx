@@ -14,7 +14,7 @@ import { useDonation } from '@/context/DonationContext';
 const STRIPE_KEY = (import.meta as any).env.VITE_STRIPE_PUBLISHABLE_KEY;
 const stripePromise = STRIPE_KEY ? loadStripe(STRIPE_KEY) : null;
 
-const API_BASE_URL = 'https://liforefoundation.onrender.com';
+const API_BASE_URL = 'https://lifofoundation.onrender.com';
 
 type Frequency = 'One Time' | 'Monthly' | 'Yearly';
 type Currency = 'CAD' | 'USD' | 'EUR' | 'GBP';

@@ -5,9 +5,9 @@ import { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 
 const IMAGES = [
-  "https://raw.githubusercontent.com/perfectgbakidz/hostingimage/refs/heads/main/87e708b0-8271-40ee-bd30-885f5b646ad6.jpg",
-  "https://raw.githubusercontent.com/perfectgbakidz/hostingimage/refs/heads/main/67bc735e-fe9b-464b-a2c4-623b2aaf1909.jpg",
-  "https://raw.githubusercontent.com/perfectgbakidz/hostingimage/refs/heads/main/8f873da1-0c0f-4614-a8d3-f07a21860981.jpg"
+  "https://raw.githubusercontent.com/perfectgbakidz/hostingimage/refs/heads/main/4dc12810-fa29-4763-b875-b204def3b3d5.JPG",
+  "https://raw.githubusercontent.com/perfectgbakidz/hostingimage/refs/heads/main/7518b41f-753c-4a88-a175-4cff04dd6494.JPG",
+  "https://raw.githubusercontent.com/perfectgbakidz/hostingimage/refs/heads/main/ef6fbdeb-ca67-4868-ab67-0e252b67e960.JPG"
 ];
 
 const slideVariants = {

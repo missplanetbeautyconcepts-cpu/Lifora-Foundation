@@ -1,5 +1,6 @@
 import AnimatedSection from '@/components/AnimatedSection';
-import DonateButton from '@/components/DonateButton';
+import { Link } from 'react-router-dom';
+import { ChevronRight } from 'lucide-react';
 
 export default function DonationCTASection() {
   return (
@@ -24,7 +25,15 @@ export default function DonationCTASection() {
             Your support helps us extend our reach and deepen our impact. Whether through donations, partnerships, or advocacy, every contribution plays a role in changing lives.
           </p>
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-            <DonateButton variant="white" className="text-lg px-10 py-5" />
+            <Link
+              to="/get-involved"
+              className="inline-flex items-center gap-2 px-10 py-5 rounded-pill font-semibold bg-white text-mao-blue hover:bg-gray-50 text-lg transition-all duration-300 shadow-button hover:shadow-button-hover"
+            >
+              Become a Volunteer
+              <div className="w-5 h-5 rounded-full flex items-center justify-center bg-mao-blue/10">
+                <ChevronRight className="w-3.5 h-3.5" />
+              </div>
+            </Link>
           </div>
         </AnimatedSection>
       </div>
