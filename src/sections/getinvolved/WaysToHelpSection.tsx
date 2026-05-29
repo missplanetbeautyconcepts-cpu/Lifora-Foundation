@@ -717,7 +717,7 @@ export default function WaysToHelpSection() {
                     <Clock className="w-5 h-5 text-mao-blue" />
                     <span>How It Works</span>
                   </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="relative p-5 rounded-2xl bg-mao-blue-light/20 border border-mao-blue-light/40">
                       <div className="absolute top-4 right-4 text-3xl font-black text-mao-blue/15">1</div>
                       <h4 className="text-base font-bold text-mao-dark mb-1">Apply</h4>
@@ -727,13 +727,6 @@ export default function WaysToHelpSection() {
                     </div>
                     <div className="relative p-5 rounded-2xl bg-mao-blue-light/20 border border-mao-blue-light/40">
                       <div className="absolute top-4 right-4 text-3xl font-black text-mao-blue/15">2</div>
-                      <h4 className="text-base font-bold text-mao-dark mb-1">Connect</h4>
-                      <p className="text-xs text-mao-body/80 leading-relaxed">
-                        Have a brief chat with our coordinator to align your skills with available roles.
-                      </p>
-                    </div>
-                    <div className="relative p-5 rounded-2xl bg-mao-blue-light/20 border border-mao-blue-light/40">
-                      <div className="absolute top-4 right-4 text-3xl font-black text-mao-blue/15">3</div>
                       <h4 className="text-base font-bold text-mao-dark mb-1">Impact</h4>
                       <p className="text-xs text-mao-body/80 leading-relaxed">
                         Get onboarded, meet our active community builders, and start contributing.

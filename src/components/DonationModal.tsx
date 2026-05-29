@@ -156,8 +156,8 @@ function DonationFormInner({
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col md:flex-row h-[90vh] md:h-auto max-h-[90vh] overflow-hidden">
-      <div className="flex-1 overflow-y-auto p-6 md:p-10 space-y-8 scrollbar-thin scrollbar-thumb-gray-200">
+    <form onSubmit={handleSubmit} className="flex flex-col md:flex-row h-[85vh] md:h-auto max-h-[85vh] md:max-h-[90vh] overflow-y-auto md:overflow-hidden w-full">
+      <div className="flex-1 md:overflow-y-auto p-5 sm:p-6 md:p-10 space-y-6 md:space-y-8 scrollbar-thin scrollbar-thumb-gray-200">
         <div className="space-y-3">
           <h2 className="text-2xl md:text-3xl font-bold text-mao-dark leading-tight">
             Empower Lives with Every Gift
@@ -300,7 +300,7 @@ function DonationFormInner({
         </div>
       </div>
 
-      <div className="p-6 bg-gray-50 border-t md:border-t-0 md:border-l border-gray-100 md:w-80 flex flex-col justify-between space-y-6">
+      <div className="p-5 sm:p-6 bg-gray-50 border-t md:border-t-0 md:border-l border-gray-100 md:w-80 shrink-0 flex flex-col justify-between space-y-4 md:space-y-6 md:overflow-y-auto">
         <div className="space-y-4">
           <h4 className="text-sm font-bold text-mao-dark uppercase tracking-wider">Summary</h4>
           <div className="space-y-2.5">
@@ -324,9 +324,17 @@ function DonationFormInner({
           <button
             type="submit"
             disabled={loading || !stripe || finalAmount <= 0 || !firstName || !email}
-            className="w-full py-4 bg-mao-dark text-white rounded-xl font-bold text-sm hover:bg-mao-gold hover:text-mao-dark transition-all disabled:opacity-30 disabled:cursor-not-allowed shadow-lg"
+            className="w-full py-3.5 bg-mao-dark text-white rounded-xl font-bold text-sm hover:bg-mao-gold hover:text-mao-dark transition-all disabled:opacity-30 disabled:cursor-not-allowed shadow-lg cursor-pointer"
           >
             {loading ? 'Processing...' : `Give ${currency} ${finalAmount.toFixed(2)}`}
+          </button>
+          
+          <button
+            type="button"
+            onClick={closeModal}
+            className="w-full py-2 text-xs text-slate-500 hover:text-mao-dark font-medium transition-all cursor-pointer text-center"
+          >
+            Cancel & Go Back
           </button>
         </div>
       </div>
@@ -389,6 +397,15 @@ export default function DonationModal() {
             exit={{ opacity: 0, scale: 0.95 }}
             className="relative bg-white w-full max-w-4xl rounded-2xl overflow-hidden shadow-2xl z-10"
           >
+            {/* Absolute Top Corner Cancel/Close Button */}
+            <button
+              onClick={closeModal}
+              className="absolute top-4 right-4 z-50 p-2 bg-white/95 hover:bg-gray-100 text-mao-dark hover:text-black rounded-full transition-all cursor-pointer shadow-md border border-gray-100 flex items-center justify-center focus:outline-none"
+              aria-label="Close modal"
+              type="button"
+            >
+              <X className="w-5 h-5" />
+            </button>
             <Elements 
                 stripe={stripePromise} 
                 options={{ 

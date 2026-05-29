@@ -1,6 +1,6 @@
 import SectionHeader from '@/components/SectionHeader';
 import AnimatedSection from '@/components/AnimatedSection';
-import { Target, Users, BookOpen, Heart, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Target, Users, Leaf, Megaphone, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 
@@ -47,28 +47,51 @@ export default function MissionSection() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <AnimatedSection>
             <SectionHeader
-              title="Our Mission & Vision"
+              title="Our Mission"
               icon={Target}
             />
 
-            <div className="space-y-8 mt-8">
-              <div className="flex gap-4">
-                <div className="w-12 h-12 shrink-0 rounded-lg bg-mao-blue flex items-center justify-center text-white">
-                  <Users className="w-6 h-6" />
-                </div>
-                <div>
-                  <h4 className="text-xl font-bold text-mao-dark mb-2">Our Mission</h4>
-                  <p className="text-mao-body">To bring life where it is needed most by providing essential support, restoring dignity, and creating pathways for individuals and communities to rebuild and thrive.</p>
-                </div>
-              </div>
+            <div className="space-y-6 mt-6">
+              <p className="text-mao-body text-base md:text-lg leading-relaxed text-left">
+                At <span className="font-semibold text-mao-blue">Lifora Foundation Canada</span>, our mission is to empower communities, foster sustainable development, and create lasting social impact across Canada. We believe that true progress begins at the grassroots level. By addressing critical socio-economic challenges, championing environmental stewardship, and supporting underserved populations, we strive to build a more equitable, resilient, and inclusive society for generations to come.
+              </p>
 
-              <div className="flex gap-4">
-                <div className="w-12 h-12 shrink-0 rounded-lg bg-mao-blue flex items-center justify-center text-white">
-                  <Heart className="w-6 h-6" />
-                </div>
-                <div>
-                  <h4 className="text-xl font-bold text-mao-dark mb-2">Our Vision</h4>
-                  <p className="text-mao-body">A world where every individual, regardless of circumstance, has access to the support, opportunity, and resources needed to live with dignity and purpose.</p>
+              <div className="pt-6 border-t border-gray-150 text-left">
+                <h4 className="text-xs font-black uppercase tracking-wider text-mao-blue mb-4">Core Pillars of Our Work</h4>
+                
+                <div className="space-y-4">
+                  {/* Pillar 1 */}
+                  <div className="flex gap-4 p-4 rounded-xl bg-white border border-gray-100 shadow-xs hover:shadow-md transition-all">
+                    <div className="w-10 h-10 shrink-0 rounded-lg bg-mao-blue/10 text-mao-blue flex items-center justify-center">
+                      <Users className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h5 className="font-bold text-mao-dark text-sm">Community Empowerment</h5>
+                      <p className="text-xs text-mao-body mt-1 leading-relaxed">Designing local initiatives that equip individuals with the skills, resources, and support systems required to thrive independently.</p>
+                    </div>
+                  </div>
+
+                  {/* Pillar 2 */}
+                  <div className="flex gap-4 p-4 rounded-xl bg-white border border-gray-100 shadow-xs hover:shadow-md transition-all">
+                    <div className="w-10 h-10 shrink-0 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                      <Leaf className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h5 className="font-bold text-mao-dark text-sm">Sustainable Solutions</h5>
+                      <p className="text-xs text-mao-body mt-1 leading-relaxed">Implementing and backing projects that prioritize long-term ecological balance and community health.</p>
+                    </div>
+                  </div>
+
+                  {/* Pillar 3 */}
+                  <div className="flex gap-4 p-4 rounded-xl bg-white border border-gray-100 shadow-xs hover:shadow-md transition-all">
+                    <div className="w-10 h-10 shrink-0 rounded-lg bg-mao-gold/15 text-mao-gold flex items-center justify-center">
+                      <Megaphone className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h5 className="font-bold text-mao-dark text-sm">Inclusive Advocacy</h5>
+                      <p className="text-xs text-mao-body mt-1 leading-relaxed">Amplifying the voices of marginalized groups and ensuring diverse communities have equal access to opportunities.</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
