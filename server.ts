@@ -53,7 +53,21 @@ async function startServer() {
         while (i < str.length && str[i] !== quote) {
           if (str[i] === '\\') {
             i++;
-            if (i < str.length) val += str[i];
+            if (i < str.length) {
+              if (str[i] === 'u') {
+                const hex = str.substring(i + 1, i + 5);
+                val += String.fromCharCode(parseInt(hex, 16));
+                i += 4;
+              } else if (str[i] === 'n') {
+                val += '\n';
+              } else if (str[i] === 't') {
+                val += '\t';
+              } else if (str[i] === 'r') {
+                val += '\r';
+              } else {
+                val += str[i];
+              }
+            }
           } else {
             val += str[i];
           }
@@ -121,33 +135,33 @@ async function startServer() {
     try {
       const { formUrl, answers } = req.body;
       if (!formUrl || !answers) {
-        res.status(400).json({ error: 'Missing formUrl or answers' });
+        res.json({ success: false, error: 'Missing formUrl or answers' });
         return;
       }
 
       const formIdMatch = formUrl.match(/\/forms\/d\/(e\/)?([a-zA-Z0-9_-]+)/);
       if (!formIdMatch) {
-        res.status(400).json({ error: 'Invalid Google Form URL' });
+        res.json({ success: false, error: 'Invalid Google Form URL' });
         return;
       }
       const formId = formIdMatch[2];
 
       const formPageRes = await fetch(formUrl);
       if (!formPageRes.ok) {
-        res.status(400).json({ error: `Failed to fetch Google Form page (HTTP ${formPageRes.status})` });
+        res.json({ success: false, error: `Failed to fetch Google Form page (HTTP ${formPageRes.status})` });
         return;
       }
       const html = await formPageRes.text();
 
       const match = html.match(/FB_PUBLIC_LOAD_DATA_\s*=\s*(.*?);/s);
       if (!match) {
-        res.status(400).json({ error: 'Could not parse Google Form configuration. Please ensure it is a public form link.' });
+        res.json({ success: false, error: 'Could not parse Google Form configuration. Please ensure it is a public form link.' });
         return;
       }
 
       const parsedData = parseJsArray(match[1].trim());
       if (!parsedData || !parsedData[1] || !parsedData[1][1]) {
-        res.status(400).json({ error: 'Malformed Google Form page structure' });
+        res.json({ success: false, error: 'Malformed Google Form page structure' });
         return;
       }
 
@@ -184,14 +198,14 @@ async function startServer() {
       });
 
       if (!submitRes.ok && submitRes.status >= 400) {
-        res.status(submitRes.status).json({ error: `Google Forms submission failed (HTTP ${submitRes.status})` });
+        res.json({ success: false, error: `Google Forms submission failed (HTTP ${submitRes.status})` });
         return;
       }
 
       res.json({ success: true });
     } catch (err: any) {
       console.error('Submission error:', err);
-      res.status(500).json({ error: err.message || 'Internal Server Error' });
+      res.json({ success: false, error: err.message || 'Internal Server Error' });
     }
   });
 

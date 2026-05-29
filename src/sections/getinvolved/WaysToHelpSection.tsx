@@ -521,9 +521,9 @@ export default function WaysToHelpSection() {
         })
       });
 
-      if (!res.ok) {
-        const errData = await res.json();
-        throw new Error(errData.error || 'Failed to submit form to Google Forms.');
+      const data = await res.json();
+      if (!res.ok || (data && data.success === false)) {
+        throw new Error((data && data.error) || 'Failed to submit form to Google Forms.');
       }
 
       setVolSubmitted(true);
@@ -560,9 +560,9 @@ export default function WaysToHelpSection() {
         })
       });
 
-      if (!res.ok) {
-        const errData = await res.json();
-        throw new Error(errData.error || 'Failed to submit Inquiry to Google Forms.');
+      const data = await res.json();
+      if (!res.ok || (data && data.success === false)) {
+        throw new Error((data && data.error) || 'Failed to submit Inquiry to Google Forms.');
       }
 
       setPartnerSubmitted(true);
