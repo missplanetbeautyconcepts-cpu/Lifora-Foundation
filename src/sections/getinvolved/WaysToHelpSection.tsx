@@ -745,7 +745,7 @@ export default function WaysToHelpSection() {
 
               {/* Right Column: Dynamic Form Block */}
               <div className="lg:col-span-5 w-full">
-                <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-xl relative overflow-hidden flex flex-col min-h-[650px]">
+                <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-xl relative overflow-hidden flex flex-col min-h-[600px]">
                   <div className="absolute top-0 inset-x-0 h-2 bg-gradient-to-r from-mao-blue to-mao-gold" />
                   
                   <div className="mb-4">
@@ -753,214 +753,38 @@ export default function WaysToHelpSection() {
                     <p className="text-sm text-mao-muted mt-1 text-left">Join hands with Lifora and become part of our support network.</p>
                   </div>
 
-                  {/* Toggle Mode */}
-                  <div className="flex items-center justify-between gap-2 border-b border-gray-100 pb-4 mb-5">
-                    <span className="text-xs font-bold uppercase tracking-wider text-mao-muted">Form View:</span>
-                    <div className="flex rounded-lg bg-gray-100 p-0.5">
-                      <button 
-                        type="button"
-                        onClick={() => toggleUseGoogleForms(true)}
-                        className={`rounded-md px-3 py-1.5 text-xs font-bold transition-all cursor-pointer ${useGoogleForms ? 'bg-white text-mao-blue shadow-xs' : 'text-mao-muted'}`}
+                  <div className="flex-1 flex flex-col justify-between mt-4">
+                    {/* Subtitle / direct link info */}
+                    <div className="mb-4 bg-mao-blue-light/20 p-3.5 rounded-xl border border-mao-blue-light/50 flex items-center justify-between gap-3 text-left">
+                      <div className="text-xs text-mao-body leading-relaxed font-medium">
+                        Filling this live embedded Google Form updates our databases immediately.
+                      </div>
+                      <a 
+                        href={volunteerFormUrl} 
+                        target="_blank" 
+                        rel="noreferrer"
+                        className="shrink-0 px-3 py-1.5 bg-mao-blue text-white rounded-lg text-xs font-bold hover:bg-mao-blue-hover transition-all flex items-center gap-1 cursor-pointer shadow-xs"
                       >
-                        Live Google Form
-                      </button>
-                      <button 
-                        type="button"
-                        onClick={() => toggleUseGoogleForms(false)}
-                        className={`rounded-md px-3 py-1.5 text-xs font-bold transition-all cursor-pointer ${!useGoogleForms ? 'bg-white text-mao-blue shadow-xs' : 'text-mao-muted'}`}
+                        <span>Open Form</span>
+                        <ExternalLink className="w-3.5 h-3.5" />
+                      </a>
+                    </div>
+
+                    <div className="flex-1 w-full bg-gray-50 rounded-2xl relative overflow-hidden h-[500px] border border-gray-150">
+                      <iframe
+                        src={getEmbedUrl(volunteerFormUrl)}
+                        width="100%"
+                        height="100%"
+                        frameBorder="0"
+                        marginHeight={0}
+                        marginWidth={0}
+                        className="absolute inset-0 w-full h-full animate-fadeIn"
+                        title="Volunteer Forms Iframe"
                       >
-                        Clean Web Form
-                      </button>
+                        Loading Google Form...
+                      </iframe>
                     </div>
                   </div>
-
-                  {useGoogleForms ? (
-                    <div className="flex-1 flex flex-col justify-between">
-                      {/* Subtitle / direct link info */}
-                      <div className="mb-4 bg-mao-blue-light/20 p-3.5 rounded-xl border border-mao-blue-light/50 flex items-center justify-between gap-3 text-left">
-                        <div className="text-xs text-mao-body leading-relaxed font-medium">
-                          Filling this live embedded Google Form updates our databases immediately.
-                        </div>
-                        <a 
-                          href={volunteerFormUrl} 
-                          target="_blank" 
-                          rel="noreferrer"
-                          className="shrink-0 px-3 py-1.5 bg-mao-blue text-white rounded-lg text-xs font-bold hover:bg-mao-blue-hover transition-all flex items-center gap-1 cursor-pointer shadow-xs"
-                        >
-                          <span>Open Form</span>
-                          <ExternalLink className="w-3.5 h-3.5" />
-                        </a>
-                      </div>
-
-                      <div className="flex-1 w-full bg-gray-50 rounded-2xl relative overflow-hidden h-[500px] border border-gray-150">
-                        <iframe
-                          src={getEmbedUrl(volunteerFormUrl)}
-                          width="100%"
-                          height="100%"
-                          frameBorder="0"
-                          marginHeight={0}
-                          marginWidth={0}
-                          className="absolute inset-0 w-full h-full animate-fadeIn"
-                          title="Volunteer Forms Iframe"
-                        >
-                          Loading Google Form...
-                        </iframe>
-                      </div>
-                    </div>
-                  ) : (
-                    volSubmitted ? (
-                      <motion.div
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        className="py-10 text-center space-y-4"
-                      >
-                        <div className="w-16 h-16 rounded-full bg-mao-gold/15 text-mao-gold flex items-center justify-center mx-auto">
-                          <CheckCircle2 className="w-10 h-10" />
-                        </div>
-                        <h4 className="text-xl font-bold text-mao-dark">Thank You so much!</h4>
-                        <p className="text-sm text-mao-muted leading-relaxed max-w-sm mx-auto">
-                          Your application was received successfully. A membership and volunteer coordinator will connect with you via email within the next 48 hours.
-                        </p>
-                        <button
-                          onClick={() => {
-                            setVolSubmitted(false);
-                            setVolName('');
-                            setVolEmail('');
-                            setVolCity('');
-                            setVolAvailability([]);
-                            setVolNotes('');
-                          }}
-                          className="mt-6 px-6 py-2 rounded-full border border-mao-blue text-mao-blue font-semibold hover:bg-mao-blue/5 text-sm transition-all"
-                        >
-                          Submit another response
-                        </button>
-                      </motion.div>
-                    ) : (
-                      <form onSubmit={handleVolunteerSubmit} className="space-y-6">
-                        {/* Section 1: Personal Info */}
-                        <div className="space-y-4">
-                          <h4 className="text-xs font-bold text-mao-blue tracking-wider uppercase border-b border-gray-100 pb-1">
-                            1. Personal Info
-                          </h4>
-                          <div>
-                            <label className="block text-xs font-semibold text-mao-dark mb-1.5">Full Name</label>
-                            <input
-                              type="text"
-                              required
-                              placeholder="John Doe"
-                              value={volName}
-                              onChange={(e) => setVolName(e.target.value)}
-                              className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-mao-blue text-sm text-mao-dark"
-                            />
-                          </div>
-                          <div>
-                            <label className="block text-xs font-semibold text-mao-dark mb-1.5">Email Address</label>
-                            <input
-                              type="email"
-                              required
-                              placeholder="johndoe@example.com"
-                              value={volEmail}
-                              onChange={(e) => setVolEmail(e.target.value)}
-                              className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-mao-blue text-sm text-mao-dark"
-                            />
-                          </div>
-                          <div>
-                            <label className="block text-xs font-semibold text-mao-dark mb-1.5">City & Province</label>
-                            <input
-                              type="text"
-                              required
-                              placeholder="e.g. Toronto, ON"
-                              value={volCity}
-                              onChange={(e) => setVolCity(e.target.value)}
-                              className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-mao-blue text-sm text-mao-dark"
-                            />
-                          </div>
-                        </div>
-
-                        {/* Section 2: Interests & Availability */}
-                        <div className="space-y-4">
-                          <h4 className="text-xs font-bold text-mao-blue tracking-wider uppercase border-b border-gray-100 pb-1">
-                            2. Interests & Availability
-                          </h4>
-                          
-                          <div>
-                            <label className="block text-xs font-semibold text-mao-dark mb-1.5">Preferred Area</label>
-                            <select
-                              value={volArea}
-                              onChange={(e) => setVolArea(e.target.value)}
-                              className="w-full px-4 py-2.5 bg-white rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-mao-blue text-sm text-mao-dark pointer-events-auto"
-                            >
-                              <option value="Community Support">Community Support</option>
-                              <option value="Sustainability Projects">Sustainability Projects</option>
-                              <option value="Digital & Creative">Digital & Creative (Remote)</option>
-                              <option value="Administration">Administration</option>
-                            </select>
-                          </div>
-
-                          <div>
-                            <label className="block text-xs font-semibold text-mao-dark mb-2">Availability</label>
-                            <div className="grid grid-cols-3 gap-2">
-                              {['Weekdays', 'Evenings', 'Weekends'].map((time) => (
-                                <button
-                                  key={time}
-                                  type="button"
-                                  onClick={() => handleAvailabilityChange(time)}
-                                  className={`py-2 px-3 rounded-xl border text-xs font-semibold transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
-                                    volAvailability.includes(time)
-                                      ? 'bg-mao-blue/10 border-mao-blue text-mao-blue shadow-sm'
-                                      : 'bg-white border-gray-200 text-mao-muted hover:border-gray-300'
-                                  }`}
-                                >
-                                  <span className={`w-2 h-2 rounded-full ${
-                                    volAvailability.includes(time) ? 'bg-mao-blue' : 'bg-gray-300'
-                                  }`} />
-                                  {time}
-                                </button>
-                              ))}
-                            </div>
-                          </div>
-
-                          <div>
-                            <label className="block text-xs font-semibold text-mao-dark mb-1.5">Skills / Notes (Optional)</label>
-                            <textarea
-                              rows={3}
-                              placeholder="Briefly tell us about your background, special skills, or standard schedules..."
-                              value={volNotes}
-                              onChange={(e) => setVolNotes(e.target.value)}
-                              className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-mao-blue text-sm text-mao-dark resize-none"
-                            />
-                          </div>
-                        </div>
-
-                        {apiError && (
-                          <div className="p-4 bg-red-50 border border-red-200 text-red-800 text-xs rounded-xl flex items-start gap-2 text-left">
-                            <AlertCircle className="w-4 h-4 shrink-0 text-red-500 mt-0.5" />
-                            <div>
-                              <span className="font-bold">Submission failed:</span> {apiError}
-                            </div>
-                          </div>
-                        )}
-
-                        <button
-                          type="submit"
-                          disabled={isVolSubmitting}
-                          className="w-full py-3.5 bg-mao-blue text-white rounded-xl font-bold hover:bg-mao-blue-hover transition-all shadow-md hover:shadow-lg disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer"
-                        >
-                          {isVolSubmitting ? (
-                            <>
-                              <div className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
-                              <span>Sending Application...</span>
-                            </>
-                          ) : (
-                            <>
-                              <Send className="w-4.5 h-4.5" />
-                              <span>Submit Application</span>
-                            </>
-                          )}
-                        </button>
-                      </form>
-                    )
-                  )}
                 </div>
               </div>
             </motion.div>
@@ -1091,7 +915,7 @@ export default function WaysToHelpSection() {
 
               {/* Right Column: Strategic Inquiry Custom or Google Form */}
               <div className="lg:col-span-5 w-full">
-                <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-xl relative overflow-hidden flex flex-col min-h-[650px]">
+                <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-xl relative overflow-hidden flex flex-col min-h-[600px]">
                   <div className="absolute top-0 inset-x-0 h-2 bg-gradient-to-r from-mao-blue via-mao-blue-hover to-mao-gold" />
                   
                   <div className="mb-4">
@@ -1099,176 +923,38 @@ export default function WaysToHelpSection() {
                     <p className="text-sm text-mao-muted mt-1">Ready to align your organization with measurable social good?</p>
                   </div>
 
-                  {/* Toggle Mode */}
-                  <div className="flex items-center justify-between gap-2 border-b border-gray-100 pb-4 mb-5">
-                    <span className="text-xs font-bold uppercase tracking-wider text-mao-muted">Form View:</span>
-                    <div className="flex rounded-lg bg-gray-100 p-0.5">
-                      <button 
-                        type="button"
-                        onClick={() => toggleUseGoogleForms(true)}
-                        className={`rounded-md px-3 py-1.5 text-xs font-bold transition-all cursor-pointer ${useGoogleForms ? 'bg-white text-mao-blue shadow-xs' : 'text-mao-muted'}`}
+                  <div className="flex-1 flex flex-col justify-between mt-4">
+                    {/* Subtitle / direct link info */}
+                    <div className="mb-4 bg-mao-blue-light/20 p-3.5 rounded-xl border border-mao-blue-light/50 flex items-center justify-between gap-3 text-left">
+                      <div className="text-xs text-mao-body leading-relaxed font-medium">
+                        Filling this live embedded Google Form updates our databases immediately.
+                      </div>
+                      <a 
+                        href={partnerFormUrl} 
+                        target="_blank" 
+                        rel="noreferrer"
+                        className="shrink-0 px-3 py-1.5 bg-mao-blue text-white rounded-lg text-xs font-bold hover:bg-mao-blue-hover transition-all flex items-center gap-1 cursor-pointer shadow-xs"
                       >
-                        Live Google Form
-                      </button>
-                      <button 
-                        type="button"
-                        onClick={() => toggleUseGoogleForms(false)}
-                        className={`rounded-md px-3 py-1.5 text-xs font-bold transition-all cursor-pointer ${!useGoogleForms ? 'bg-white text-mao-blue shadow-xs' : 'text-mao-muted'}`}
+                        <span>Open Form</span>
+                        <ExternalLink className="w-3.5 h-3.5" />
+                      </a>
+                    </div>
+
+                    <div className="flex-1 w-full bg-gray-50 rounded-2xl relative overflow-hidden h-[500px] border border-gray-150">
+                      <iframe
+                        src={getEmbedUrl(partnerFormUrl)}
+                        width="100%"
+                        height="100%"
+                        frameBorder="0"
+                        marginHeight={0}
+                        marginWidth={0}
+                        className="absolute inset-0 w-full h-full animate-fadeIn"
+                        title="Partnership Forms Iframe"
                       >
-                        Clean Web Form
-                      </button>
+                        Loading Google Form...
+                      </iframe>
                     </div>
                   </div>
-
-                  {useGoogleForms ? (
-                    <div className="flex-1 flex flex-col justify-between">
-                      {/* Subtitle / direct link info */}
-                      <div className="mb-4 bg-mao-blue-light/20 p-3.5 rounded-xl border border-mao-blue-light/50 flex items-center justify-between gap-3 text-left">
-                        <div className="text-xs text-mao-body leading-relaxed font-medium">
-                          Filling this live embedded Google Form updates our databases immediately.
-                        </div>
-                        <a 
-                          href={partnerFormUrl} 
-                          target="_blank" 
-                          rel="noreferrer"
-                          className="shrink-0 px-3 py-1.5 bg-mao-blue text-white rounded-lg text-xs font-bold hover:bg-mao-blue-hover transition-all flex items-center gap-1 cursor-pointer shadow-xs"
-                        >
-                          <span>Open Form</span>
-                          <ExternalLink className="w-3.5 h-3.5" />
-                        </a>
-                      </div>
-
-                      <div className="flex-1 w-full bg-gray-50 rounded-2xl relative overflow-hidden h-[500px] border border-gray-150">
-                        <iframe
-                          src={getEmbedUrl(partnerFormUrl)}
-                          width="100%"
-                          height="100%"
-                          frameBorder="0"
-                          marginHeight={0}
-                          marginWidth={0}
-                          className="absolute inset-0 w-full h-full animate-fadeIn"
-                          title="Partnership Forms Iframe"
-                        >
-                          Loading Google Form...
-                        </iframe>
-                      </div>
-                    </div>
-                  ) : (
-                    partnerSubmitted ? (
-                      <motion.div
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        className="py-10 text-center space-y-4"
-                      >
-                        <div className="w-16 h-16 rounded-full bg-mao-gold/15 text-mao-gold flex items-center justify-center mx-auto">
-                          <CheckCircle2 className="w-10 h-10" />
-                        </div>
-                        <h4 className="text-xl font-bold text-mao-dark font-sans">Inquiry Received</h4>
-                        <p className="text-sm text-mao-muted leading-relaxed max-w-sm mx-auto">
-                          Wonderful! Your partnership goals have been submitted to our board of corporate relations. A senior relationships manager will match your profile and reach out within 2 business days.
-                        </p>
-                        <button
-                          onClick={() => {
-                            setPartnerSubmitted(false);
-                            setPartnerCompany('');
-                            setPartnerContact('');
-                            setPartnerEmail('');
-                            setPartnerGoals('');
-                          }}
-                          className="mt-6 px-6 py-2 rounded-full border border-mao-blue text-mao-blue font-semibold hover:bg-mao-blue/5 text-sm transition-all"
-                        >
-                          Submit another inquiry
-                        </button>
-                      </motion.div>
-                    ) : (
-                      <form onSubmit={handlePartnerSubmit} className="space-y-6">
-                        <div className="p-4 rounded-xl bg-mao-cream border border-mao-gold/20 text-xs text-mao-body leading-relaxed mb-2 font-medium">
-                          “Let’s Build Something Together”
-                          <br />
-                          <span className="text-mao-muted font-normal block mt-1">
-                            Fill out our brief partnership inquiry form below, and our alliances coordinator will discuss custom collaboration opportunities with you.
-                          </span>
-                        </div>
-
-                        <div className="space-y-4">
-                          <div>
-                            <label className="block text-xs font-semibold text-mao-dark mb-1.5">Company Name</label>
-                            <input
-                              type="text"
-                              required
-                              placeholder="e.g. Acme Corp"
-                              value={partnerCompany}
-                              onChange={(e) => setPartnerCompany(e.target.value)}
-                              className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-mao-blue text-sm text-mao-dark"
-                            />
-                          </div>
-
-                          <div>
-                            <label className="block text-xs font-semibold text-mao-dark mb-1.5">Contact Name & Title</label>
-                            <input
-                              type="text"
-                              required
-                              placeholder="Jane Smith, VP of Sustainability"
-                              value={partnerContact}
-                              onChange={(e) => setPartnerContact(e.target.value)}
-                              className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-mao-blue text-sm text-mao-dark"
-                            />
-                          </div>
-
-                          <div>
-                            <label className="block text-xs font-semibold text-mao-dark mb-1.5">Work Email</label>
-                            <input
-                              type="email"
-                              required
-                              placeholder="janesmith@acme.com"
-                              value={partnerEmail}
-                              onChange={(e) => setPartnerEmail(e.target.value)}
-                              className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-mao-blue text-sm text-mao-dark"
-                            />
-                          </div>
-
-                          <div>
-                            <label className="block text-xs font-semibold text-mao-dark mb-1.5">Briefly describe your partnership goals</label>
-                            <textarea
-                              required
-                              rows={4}
-                              placeholder="What initiatives align best with company values? Are you interested in program sponsorships, pro-bono support, cause-marketing or volunteering?"
-                              value={partnerGoals}
-                              onChange={(e) => setPartnerGoals(e.target.value)}
-                              className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-mao-blue text-sm text-mao-dark resize-none text-[13px] leading-relaxed"
-                            />
-                          </div>
-                        </div>
-
-                        {apiError && (
-                          <div className="p-4 bg-red-50 border border-red-200 text-red-800 text-xs rounded-xl flex items-start gap-2 text-left">
-                            <AlertCircle className="w-4 h-4 shrink-0 text-red-500 mt-0.5" />
-                            <div>
-                              <span className="font-bold">Submission failed:</span> {apiError}
-                            </div>
-                          </div>
-                        )}
-
-                        <button
-                          type="submit"
-                          disabled={isPartnerSubmitting}
-                          className="w-full py-3.5 bg-mao-blue text-white rounded-xl font-bold hover:bg-mao-blue-hover transition-all shadow-md hover:shadow-lg disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer text-sm"
-                        >
-                          {isPartnerSubmitting ? (
-                            <>
-                              <div className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
-                              <span>Sending Inquiry...</span>
-                            </>
-                          ) : (
-                            <>
-                              <FileText className="w-4.5 h-4.5" />
-                              <span>Submit Partnership Inquiry</span>
-                            </>
-                          )}
-                        </button>
-                      </form>
-                    )
-                  )}
                 </div>
               </div>
             </motion.div>
@@ -1442,28 +1128,6 @@ export default function WaysToHelpSection() {
                           </div>
                         )}
                       </div>
-                    </div>
-
-                    <div className="flex items-center justify-between p-4 rounded-2xl bg-mao-cream/50 border border-mao-gold/20">
-                      <div className="space-y-0.5 text-left">
-                        <span className="text-xs font-bold text-mao-dark block">Enable Live Google Form Embeds</span>
-                        <span className="text-[11px] text-mao-muted block">
-                          This replaces our standard custom templates with your live interactive Google Forms on the frontend.
-                        </span>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => setTempUseEmbed(!tempUseEmbed)}
-                        className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
-                          tempUseEmbed ? 'bg-mao-blue' : 'bg-gray-250'
-                        }`}
-                      >
-                        <span
-                          className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-sm ring-0 transition duration-200 ease-in-out ${
-                            tempUseEmbed ? 'translate-x-5' : 'translate-x-0'
-                          }`}
-                        />
-                      </button>
                     </div>
 
                     <div className="flex justify-end border-b border-gray-100 pb-6">
