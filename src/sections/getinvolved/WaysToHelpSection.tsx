@@ -826,7 +826,7 @@ export default function WaysToHelpSection() {
                       </p>
                       <ul className="text-xs space-y-1 text-mao-dark bg-mao-cream/50 p-3 rounded-lg pl-2 border border-gray-50/50">
                         <li><strong className="text-mao-blue">The Impact:</strong> Your investment goes straight to front-line delivery.</li>
-                        <li><strong className="text-mao-blue">Recognition:</strong> Logo placement on our website, annual reports, and PRs.</li>
+                        <li><strong className="text-mao-blue">Recognition:</strong> Prominent logo placement on our website, annual impact reports, and press releases.</li>
                       </ul>
                     </div>
 
