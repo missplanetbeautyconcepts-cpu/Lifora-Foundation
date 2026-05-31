@@ -355,6 +355,17 @@ export default function DonationModal() {
   const [email, setEmail] = useState('');
 
   useEffect(() => {
+    if (isModalOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isModalOpen]);
+
+  useEffect(() => {
     fetch(`${API_BASE_URL}/api/exchange-rate`)
       .then(res => res.json())
       .then(data => setExchangeRates(data.rates))
