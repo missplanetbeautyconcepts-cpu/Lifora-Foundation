@@ -147,7 +147,7 @@ function DonationFormInner({
         </p>
         <button 
           onClick={closeModal}
-          className="w-full max-w-xs py-4 bg-mao-dark text-white rounded-xl font-bold hover:bg-mao-blue transition-all"
+          className="w-full max-w-xs py-3.5 bg-mao-dark text-white rounded-xl font-bold hover:bg-mao-blue transition-all shadow-md shadow-black/5 hover:shadow-lg hover:shadow-black/10 cursor-pointer transform active:scale-95 duration-300"
         >
           Return to Site
         </button>
@@ -324,7 +324,7 @@ function DonationFormInner({
           <button
             type="submit"
             disabled={loading || !stripe || finalAmount <= 0 || !firstName || !email}
-            className="w-full py-3.5 bg-mao-dark text-white rounded-xl font-bold text-sm hover:bg-mao-gold hover:text-mao-dark transition-all disabled:opacity-30 disabled:cursor-not-allowed shadow-lg cursor-pointer"
+            className="w-full py-3.5 bg-mao-dark text-white rounded-xl font-bold text-sm hover:bg-mao-gold hover:text-mao-dark transition-all disabled:opacity-30 disabled:cursor-not-allowed shadow-md shadow-black/5 hover:shadow-lg hover:shadow-black/10 cursor-pointer transform active:scale-95 duration-300"
           >
             {loading ? 'Processing...' : `Give ${currency} ${finalAmount.toFixed(2)}`}
           </button>
@@ -385,7 +385,7 @@ export default function DonationModal() {
           <Lock className="w-16 h-16 text-amber-500 mx-auto" />
           <h3 className="text-xl font-bold">Stripe Key Required</h3>
           <p className="text-sm">Configure VITE_STRIPE_PUBLISHABLE_KEY to enable donations.</p>
-          <button onClick={closeModal} className="w-full py-3 bg-mao-dark text-white rounded-lg font-bold">Close</button>
+          <button onClick={closeModal} className="w-full py-3 bg-mao-dark text-white rounded-xl font-bold shadow-md shadow-black/5 hover:shadow-lg hover:shadow-black/10 transition-all duration-300 transform active:scale-95 cursor-pointer">Close</button>
         </div>
       </div>
     );

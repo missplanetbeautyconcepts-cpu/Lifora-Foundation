@@ -11,16 +11,16 @@ export default function DonateButton({ variant = 'primary', className }: DonateB
   const { openModal } = useDonation();
   
   const variants = {
-    primary: 'bg-mao-gold text-white hover:bg-opacity-90 shadow-button hover:shadow-button-hover',
-    white: 'bg-white text-mao-blue hover:bg-gray-50',
-    outline: 'border-2 border-mao-blue text-mao-blue hover:bg-mao-blue hover:text-white',
+    primary: 'bg-mao-gold text-white hover:bg-opacity-90 shadow-md shadow-mao-gold/15 hover:shadow-lg hover:shadow-mao-gold/25',
+    white: 'bg-white text-mao-blue hover:bg-gray-50 shadow-md shadow-black/5 hover:shadow-lg hover:shadow-black/10',
+    outline: 'border border-mao-blue text-mao-blue hover:bg-mao-blue hover:text-white hover:shadow-md hover:shadow-mao-blue/5',
   };
 
   return (
     <button
       onClick={openModal}
       className={cn(
-        'inline-flex items-center gap-2 px-6 py-2.5 rounded-pill font-semibold transition-all duration-300',
+        'inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl font-semibold transition-all duration-300 transform active:scale-95 cursor-pointer',
         variants[variant],
         className
       )}

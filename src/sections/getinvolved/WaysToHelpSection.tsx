@@ -1015,7 +1015,7 @@ export default function WaysToHelpSection() {
                             type="button"
                             onClick={handleAutoCreateForms}
                             disabled={autoCreating}
-                            className="inline-flex items-center gap-2 px-5 py-2.5 bg-mao-blue hover:bg-mao-blue-hover text-white text-xs font-bold rounded-xl transition-all shadow-sm hover:shadow-md disabled:opacity-50 cursor-pointer w-full sm:w-auto justify-center"
+                            className="inline-flex items-center gap-2 px-6 py-3 bg-mao-blue hover:bg-mao-blue-hover text-white text-xs font-bold rounded-xl transition-all shadow-md shadow-mao-blue/5 hover:shadow-lg hover:shadow-mao-blue/10 disabled:opacity-50 cursor-pointer w-full sm:w-auto justify-center transform active:scale-95 duration-300"
                           >
                             {autoCreating ? (
                               <>
@@ -1126,7 +1126,7 @@ export default function WaysToHelpSection() {
                     <div className="flex justify-end border-b border-gray-100 pb-6">
                       <button
                         type="submit"
-                        className="px-6 py-2.5 bg-mao-blue text-white rounded-xl text-xs font-bold hover:bg-mao-blue-hover transition-all shadow-sm cursor-pointer"
+                        className="px-6 py-2.5 bg-mao-blue text-white rounded-xl text-xs font-bold hover:bg-mao-blue-hover transition-all shadow-md shadow-mao-blue/5 hover:shadow-lg transform active:scale-95 duration-300 cursor-pointer"
                       >
                         Apply & Save Links
                       </button>
@@ -1159,7 +1159,7 @@ export default function WaysToHelpSection() {
                         </div>
                         <button
                           onClick={handleSignIn}
-                          className="inline-flex items-center gap-2.5 px-6 py-3 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 text-mao-dark font-sans font-semibold text-xs transition-all shadow-sm cursor-pointer"
+                          className="inline-flex items-center gap-2.5 px-6 py-3 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 text-mao-dark font-sans font-semibold text-xs transition-all shadow-md shadow-black/5 hover:shadow-lg transform active:scale-95 duration-300 cursor-pointer"
                         >
                           <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
@@ -1224,7 +1224,7 @@ export default function WaysToHelpSection() {
                               type="button"
                               onClick={() => fetchGoogleFormResponses(selectedDashboardForm === 'volunteer' ? volunteerFormUrl : partnerFormUrl)}
                               disabled={apiLoading}
-                              className="px-5 py-2.5 bg-mao-blue hover:bg-mao-blue-hover text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all disabled:opacity-50 cursor-pointer"
+                              className="px-5 py-2.5 bg-mao-blue hover:bg-mao-blue-hover text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all shadow-md shadow-mao-blue/5 hover:shadow-lg disabled:opacity-50 cursor-pointer transform active:scale-95 duration-300"
                             >
                               <RefreshCw className={`w-3.5 h-3.5 ${apiLoading ? 'animate-spin' : ''}`} />
                               <span>{apiLoading ? 'Syncing...' : 'Load Submissions'}</span>
@@ -1313,7 +1313,7 @@ export default function WaysToHelpSection() {
                   </div>
                   <button
                     onClick={() => setShowSettings(false)}
-                    className="px-6 py-2 bg-mao-dark text-white rounded-xl text-xs font-bold hover:bg-opacity-90 shadow-sm cursor-pointer"
+                    className="px-6 py-2.5 bg-mao-dark text-white rounded-xl text-xs font-bold hover:bg-opacity-90 shadow-md shadow-black/5 hover:shadow-lg transform active:scale-95 duration-300 cursor-pointer"
                   >
                     Done & Close
                   </button>

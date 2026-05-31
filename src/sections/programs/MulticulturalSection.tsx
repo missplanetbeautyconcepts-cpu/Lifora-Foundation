@@ -18,7 +18,7 @@ export default function MulticulturalSection() {
             centered
             light
           />
-          <button className="mt-8 px-8 py-3 bg-white text-mao-blue font-bold rounded-pill hover:bg-mao-blue-light transition-colors">
+          <button className="mt-8 px-8 py-3 bg-white text-mao-blue font-bold rounded-xl shadow-md shadow-black/5 hover:shadow-lg hover:shadow-black/10 transition-all duration-300 transform active:scale-95">
             Our Cultural Calendar
           </button>
         </AnimatedSection>

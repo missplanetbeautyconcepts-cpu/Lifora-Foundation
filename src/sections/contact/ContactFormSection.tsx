@@ -57,7 +57,7 @@ export default function ContactFormSection() {
               <div className="pt-4">
                 <button
                   type="submit"
-                  className="w-full py-5 bg-mao-blue text-white font-bold text-lg rounded-pill shadow-button hover:bg-mao-blue-hover transition-all translate-y-0 active:scale-95"
+                  className="w-full py-4.5 bg-mao-blue text-white font-bold text-lg rounded-xl shadow-md shadow-mao-blue/10 hover:shadow-lg hover:shadow-mao-blue/15 transition-all duration-300 translate-y-0 active:scale-95"
                 >
                   Send Message
                 </button>
