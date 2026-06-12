@@ -1,68 +1,166 @@
+import React, { useState } from 'react';
 import SectionHeader from '@/components/SectionHeader';
 import AnimatedSection from '@/components/AnimatedSection';
+import { motion, AnimatePresence } from 'motion/react';
+import { CheckCircle2, Send } from 'lucide-react';
 
 export default function ContactFormSection() {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [reason, setReason] = useState('volunteer');
+  const [message, setMessage] = useState('');
+  const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    // Mimic real-time API call response lag
+    await new Promise((resolve) => setTimeout(resolve, 850));
+    setSubmitted(true);
+    setIsSubmitting(false);
+  };
+
   return (
-    <section className="py-24 bg-mao-cream">
+    <section className="py-24 bg-mao-cream" id="contact-form">
       <div className="max-w-4xl mx-auto px-4">
         <AnimatedSection>
-          <div className="bg-white p-8 md:p-16 rounded-3xl shadow-xl border border-gray-100">
-            <SectionHeader
-              title="Get in Touch"
-              subtitle="Have a question or want to partner with us? Fill out the form and we'll start a conversation."
-              centered
-            />
-
-            <form className="mt-12 space-y-8" onSubmit={(e) => { e.preventDefault(); console.log('Message sent!'); }}>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="space-y-2">
-                  <label className="text-sm font-bold text-mao-dark uppercase tracking-wider">Your Name</label>
-                  <input
-                    type="text"
-                    required
-                    className="w-full px-5 py-4 rounded-xl bg-gray-50 border border-gray-100 focus:bg-white focus:border-mao-blue focus:ring-2 focus:ring-mao-blue/20 outline-none transition-all"
-                    placeholder="E.g. John Doe"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-bold text-mao-dark uppercase tracking-wider">Email Address</label>
-                  <input
-                    type="email"
-                    required
-                    className="w-full px-5 py-4 rounded-xl bg-gray-50 border border-gray-100 focus:bg-white focus:border-mao-blue focus:ring-2 focus:ring-mao-blue/20 outline-none transition-all"
-                    placeholder="john@example.com"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-bold text-mao-dark uppercase tracking-wider">Subject</label>
-                <input
-                  type="text"
-                  required
-                  className="w-full px-5 py-4 rounded-xl bg-gray-50 border border-gray-100 focus:bg-white focus:border-mao-blue focus:ring-2 focus:ring-mao-blue/20 outline-none transition-all"
-                  placeholder="How can we help you?"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-bold text-mao-dark uppercase tracking-wider">Your Message</label>
-                <textarea
-                  required
-                  className="w-full px-5 py-4 rounded-xl bg-gray-50 border border-gray-100 focus:bg-white focus:border-mao-blue focus:ring-2 focus:ring-mao-blue/20 outline-none transition-all h-48 resize-none"
-                  placeholder="Write your message here..."
-                />
-              </div>
-
-              <div className="pt-4">
-                <button
-                  type="submit"
-                  className="w-full py-4.5 bg-mao-blue text-white font-bold text-lg rounded-xl shadow-md shadow-mao-blue/10 hover:shadow-lg hover:shadow-mao-blue/15 transition-all duration-300 translate-y-0 active:scale-95"
+          <div className="bg-white p-8 md:p-16 rounded-3xl shadow-xl border border-gray-100 relative overflow-hidden min-h-[500px] flex flex-col justify-center">
+            {/* Design accents */}
+            <div className="absolute top-0 inset-x-0 h-2 bg-gradient-to-r from-mao-blue via-mao-blue-hover to-mao-gold" />
+            
+            <AnimatePresence mode="wait">
+              {submitted ? (
+                <motion.div
+                  key="success"
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  className="text-center py-12 space-y-6 max-w-lg mx-auto"
                 >
-                  Send Message
-                </button>
-              </div>
-            </form>
+                  <div className="w-18 h-18 rounded-full bg-green-50 flex items-center justify-center text-green-500 border border-green-100 mx-auto">
+                    <CheckCircle2 className="w-9 h-9" />
+                  </div>
+                  <div className="space-y-2">
+                    <h3 className="text-2xl font-extrabold text-mao-dark">Thank You, {name}!</h3>
+                    <p className="text-sm text-mao-muted leading-relaxed">
+                      Your request regarding <span className="font-bold text-mao-blue text-xs uppercase bg-mao-blue/5 px-2.5 py-1 rounded-md">{reason}</span> support has been logged. Our coordinators will review your details and reach out to you via <span className="font-medium text-mao-dark">{email}</span> or phone shortly.
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => {
+                      setSubmitted(false);
+                      setName('');
+                      setEmail('');
+                      setPhone('');
+                      setReason('volunteer');
+                      setMessage('');
+                    }}
+                    className="px-8 py-3 bg-mao-blue hover:bg-mao-blue-hover text-white text-xs font-bold rounded-xl transition-all shadow-md transform active:scale-95 duration-200 cursor-pointer"
+                  >
+                    Send Another Message
+                  </button>
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="form"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                >
+                  <SectionHeader
+                    title="Get in Touch"
+                    subtitle="Have a question, want to volunteer, or discuss a strategic partnership? Fill out the details below."
+                    centered
+                  />
+
+                  <form className="mt-12 space-y-6" onSubmit={handleSubmit}>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="space-y-2 text-left">
+                        <label className="text-xs font-bold text-mao-dark uppercase tracking-wider">Full Name</label>
+                        <input
+                          type="text"
+                          required
+                          value={name}
+                          onChange={(e) => setName(e.target.value)}
+                          className="w-full px-5 py-3.5 rounded-xl bg-gray-50 border border-gray-100 focus:bg-white focus:border-mao-blue focus:ring-2 focus:ring-mao-blue/15 outline-none text-sm transition-all text-mao-dark"
+                          placeholder="E.g. John Doe"
+                        />
+                      </div>
+                      <div className="space-y-2 text-left">
+                        <label className="text-xs font-bold text-mao-dark uppercase tracking-wider">Email Address</label>
+                        <input
+                          type="email"
+                          required
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          className="w-full px-5 py-3.5 rounded-xl bg-gray-50 border border-gray-100 focus:bg-white focus:border-mao-blue focus:ring-2 focus:ring-mao-blue/15 outline-none text-sm transition-all text-mao-dark"
+                          placeholder="john@example.com"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="space-y-2 text-left">
+                        <label className="text-xs font-bold text-mao-dark uppercase tracking-wider">Phone Number</label>
+                        <input
+                          type="tel"
+                          required
+                          value={phone}
+                          onChange={(e) => setPhone(e.target.value)}
+                          className="w-full px-5 py-3.5 rounded-xl bg-gray-50 border border-gray-100 focus:bg-white focus:border-mao-blue focus:ring-2 focus:ring-mao-blue/15 outline-none text-sm transition-all text-mao-dark"
+                          placeholder="E.g. +1 (555) 000-0000"
+                        />
+                      </div>
+                      <div className="space-y-2 text-left">
+                        <label className="text-xs font-bold text-mao-dark uppercase tracking-wider">Reason for Contact</label>
+                        <select
+                          value={reason}
+                          onChange={(e) => setReason(e.target.value)}
+                          className="w-full px-5 py-3.5 rounded-xl bg-gray-50 border border-gray-100 focus:bg-white focus:border-mao-blue focus:ring-2 focus:ring-mao-blue/15 outline-none text-sm font-medium transition-all text-mao-dark cursor-pointer appearance-none"
+                          style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 24 24\' stroke=\'%23111827\'%3E%3Cpath stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M19 9l-7 7-7-7\'/%3E%3C/svg%3E")', backgroundPosition: 'right 1.25rem center', backgroundSize: '1rem', backgroundRepeat: 'no-repeat' }}
+                        >
+                          <option value="volunteer">Volunteer</option>
+                          <option value="support">Support</option>
+                          <option value="enquiry">Enquiry</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2 text-left">
+                      <label className="text-xs font-bold text-mao-dark uppercase tracking-wider">Your Message / Additional Notes (Optional)</label>
+                      <textarea
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
+                        className="w-full px-5 py-3.5 rounded-xl bg-gray-50 border border-gray-100 focus:bg-white focus:border-mao-blue focus:ring-2 focus:ring-mao-blue/15 outline-none text-sm transition-all h-32 resize-none text-mao-dark"
+                        placeholder="Tell us more about how we can collaborate..."
+                      />
+                    </div>
+
+                    <div className="pt-4">
+                      <button
+                        type="submit"
+                        disabled={isSubmitting}
+                        className="w-full py-4 bg-mao-blue text-white font-bold text-base rounded-xl shadow-md shadow-mao-blue/10 hover:shadow-lg hover:shadow-mao-blue/15 transition-all duration-300 transform active:scale-95 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                      >
+                        {isSubmitting ? (
+                          <>
+                            <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                            <span>Sending Message...</span>
+                          </>
+                        ) : (
+                          <>
+                            <Send className="w-4 h-4" />
+                            <span>Send Message</span>
+                          </>
+                        )}
+                      </button>
+                    </div>
+                  </form>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </AnimatedSection>
       </div>
