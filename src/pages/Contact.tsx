@@ -1,6 +1,7 @@
 import PageHero from '@/components/PageHero';
 import ContactCardsSection from '@/sections/contact/ContactCardsSection';
 import ContactFormSection from '@/sections/contact/ContactFormSection';
+import WaysToHelpSection from '@/sections/getinvolved/WaysToHelpSection';
 
 export default function Contact() {
   return (
@@ -11,6 +12,7 @@ export default function Contact() {
         breadcrumbs={['Home', 'Contact']}
       />
       <ContactCardsSection />
+      <WaysToHelpSection />
       <ContactFormSection />
     </main>
   );

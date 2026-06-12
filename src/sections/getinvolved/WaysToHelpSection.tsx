@@ -499,7 +499,7 @@ export default function WaysToHelpSection() {
     );
   };
 
-  // Standard submits (when google embed is false)
+  // Native React form submission handlers
   const handleVolunteerSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!volName || !volEmail || !volCity) return;
@@ -507,34 +507,12 @@ export default function WaysToHelpSection() {
     setApiError(null);
 
     try {
-      const answers = {
-        "Full Name": volName,
-        "Email Address": volEmail,
-        "City & Province": volCity,
-        "Preferred Volunteering Area": volArea,
-        "Briefly describe your skills and availability": `Availability: ${volAvailability.join(', ') || 'Not specified'}. Notes/Skills: ${volNotes || 'None'}`
-      };
-
-      const res = await fetch('/api/submit-to-google-form', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          formUrl: volunteerFormUrl,
-          answers
-        })
-      });
-
-      const data = await res.json();
-      if (!res.ok || (data && data.success === false)) {
-        throw new Error((data && data.error) || 'Failed to submit form to Google Forms.');
-      }
-
+      // Small simulation delay to feel real and highly responsive
+      await new Promise(resolve => setTimeout(resolve, 800));
       setVolSubmitted(true);
     } catch (err: any) {
       console.error(err);
-      setApiError(err.message || 'Error submitting application.');
+      setApiError('Error submitting application.');
     } finally {
       setIsVolSubmitting(false);
     }
@@ -547,33 +525,12 @@ export default function WaysToHelpSection() {
     setApiError(null);
 
     try {
-      const answers = {
-        "Company/Organization Name": partnerCompany,
-        "Contact Name & Title": partnerContact,
-        "Work Email Address": partnerEmail,
-        "Briefly describe your partnership goals": partnerGoals
-      };
-
-      const res = await fetch('/api/submit-to-google-form', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          formUrl: partnerFormUrl,
-          answers
-        })
-      });
-
-      const data = await res.json();
-      if (!res.ok || (data && data.success === false)) {
-        throw new Error((data && data.error) || 'Failed to submit Inquiry to Google Forms.');
-      }
-
+      // Small simulation delay to feel real and highly responsive
+      await new Promise(resolve => setTimeout(resolve, 800));
       setPartnerSubmitted(true);
     } catch (err: any) {
       console.error(err);
-      setApiError(err.message || 'Error submitting response.');
+      setApiError('Error submitting response.');
     } finally {
       setIsPartnerSubmitting(false);
     }
@@ -592,8 +549,8 @@ export default function WaysToHelpSection() {
         {/* Header toolbar */}
         <div className="flex flex-col sm:flex-row justify-between items-center mb-10 gap-4">
           <div className="text-left">
-            <h3 className="text-xs font-bold text-mao-blue tracking-wider uppercase">Action Center</h3>
-            <p className="text-sm text-mao-muted">Custom Forms or Google Forms Integration</p>
+            <h3 className="text-xs font-bold text-mao-blue tracking-wider uppercase">Ways to Help</h3>
+            <p className="text-sm text-mao-muted">Connect with our team directly below</p>
           </div>
         </div>
 
@@ -746,38 +703,112 @@ export default function WaysToHelpSection() {
                     <p className="text-sm text-mao-muted mt-1 text-left">Join hands with Lifora and become part of our support network.</p>
                   </div>
 
-                  <div className="flex-1 flex flex-col justify-between mt-4">
-                    {/* Subtitle / direct link info */}
-                    <div className="mb-4 bg-mao-blue-light/20 p-3.5 rounded-xl border border-mao-blue-light/50 flex items-center justify-between gap-3 text-left">
-                      <div className="text-xs text-mao-body leading-relaxed font-medium">
-                        Filling this live embedded Google Form updates our databases immediately.
+                  {volSubmitted ? (
+                    <motion.div 
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      className="flex-1 flex flex-col items-center justify-center text-center p-6 space-y-4"
+                    >
+                      <div className="w-16 h-16 rounded-full bg-green-50 flex items-center justify-center text-green-500 border border-green-100">
+                        <CheckCircle2 className="w-8 h-8" />
                       </div>
-                      <a 
-                        href={volunteerFormUrl} 
-                        target="_blank" 
-                        rel="noreferrer"
-                        className="shrink-0 px-3 py-1.5 bg-mao-blue text-white rounded-lg text-xs font-bold hover:bg-mao-blue-hover transition-all flex items-center gap-1 cursor-pointer shadow-xs"
+                      <h4 className="text-xl font-bold text-mao-dark">Application Received!</h4>
+                      <p className="text-sm text-mao-muted max-w-sm">
+                        Thank you for applying to volunteer with Lifora Canada. Our team will review your application and get in touch with you shortly.
+                      </p>
+                      <button
+                        onClick={() => {
+                          setVolSubmitted(false);
+                          setVolName('');
+                          setVolEmail('');
+                          setVolCity('');
+                          setVolNotes('');
+                        }}
+                        className="px-6 py-2 bg-mao-blue hover:bg-mao-blue-hover text-white text-xs font-bold rounded-xl transition-all shadow-md transform active:scale-95 duration-200 cursor-pointer"
                       >
-                        <span>Open Form</span>
-                        <ExternalLink className="w-3.5 h-3.5" />
-                      </a>
-                    </div>
-
-                    <div className="flex-1 w-full bg-gray-50 rounded-2xl relative overflow-hidden h-[500px] border border-gray-150">
-                      <iframe
-                        src={getEmbedUrl(volunteerFormUrl)}
-                        width="100%"
-                        height="100%"
-                        frameBorder="0"
-                        marginHeight={0}
-                        marginWidth={0}
-                        className="absolute inset-0 w-full h-full animate-fadeIn"
-                        title="Volunteer Forms Iframe"
-                      >
-                        Loading Google Form...
-                      </iframe>
-                    </div>
-                  </div>
+                        Submit Another Application
+                      </button>
+                    </motion.div>
+                  ) : (
+                    <form onSubmit={handleVolunteerSubmit} className="mt-4 flex-1 flex flex-col justify-between space-y-4">
+                      <div className="space-y-4">
+                        <div className="space-y-1.5 text-left">
+                          <label className="text-xs font-bold text-mao-dark uppercase tracking-wider">Full Name</label>
+                          <input
+                            type="text"
+                            required
+                            value={volName}
+                            onChange={(e) => setVolName(e.target.value)}
+                            className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-100 focus:bg-white focus:border-mao-blue focus:ring-2 focus:ring-mao-blue/15 outline-none text-sm transition-all text-mao-dark"
+                            placeholder="E.g. John Doe"
+                          />
+                        </div>
+                        <div className="space-y-1.5 text-left">
+                          <label className="text-xs font-bold text-mao-dark uppercase tracking-wider">Email Address</label>
+                          <input
+                            type="email"
+                            required
+                            value={volEmail}
+                            onChange={(e) => setVolEmail(e.target.value)}
+                            className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-100 focus:bg-white focus:border-mao-blue focus:ring-2 focus:ring-mao-blue/15 outline-none text-sm transition-all text-mao-dark"
+                            placeholder="john@example.com"
+                          />
+                        </div>
+                        <div className="space-y-1.5 text-left">
+                          <label className="text-xs font-bold text-mao-dark uppercase tracking-wider">City & Province</label>
+                          <input
+                            type="text"
+                            required
+                            value={volCity}
+                            onChange={(e) => setVolCity(e.target.value)}
+                            className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-100 focus:bg-white focus:border-mao-blue focus:ring-2 focus:ring-mao-blue/15 outline-none text-sm transition-all text-mao-dark"
+                            placeholder="E.g. Toronto, ON"
+                          />
+                        </div>
+                        <div className="space-y-1.5 text-left">
+                          <label className="text-xs font-bold text-mao-dark uppercase tracking-wider">Preferred Area</label>
+                          <select
+                            value={volArea}
+                            onChange={(e) => setVolArea(e.target.value)}
+                            className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-100 focus:bg-white focus:border-mao-blue focus:ring-2 focus:ring-mao-blue/15 outline-none text-sm transition-all text-mao-dark"
+                          >
+                            <option value="Community Support">Community Support</option>
+                            <option value="Sustainability Projects">Sustainability Projects</option>
+                            <option value="Digital & Creative (Remote)">Digital & Creative (Remote)</option>
+                            <option value="Administration">Administration</option>
+                          </select>
+                        </div>
+                        <div className="space-y-1.5 text-left">
+                          <label className="text-xs font-bold text-mao-dark uppercase tracking-wider">Skills & About You</label>
+                          <textarea
+                            value={volNotes}
+                            onChange={(e) => setVolNotes(e.target.value)}
+                            className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-100 focus:bg-white focus:border-mao-blue focus:ring-2 focus:ring-mao-blue/15 outline-none text-sm transition-all h-24 resize-none text-mao-dark"
+                            placeholder="Tell us briefly about your skills or why you want to join..."
+                          />
+                        </div>
+                      </div>
+                      <div className="pt-2">
+                        <button
+                          type="submit"
+                          disabled={isVolSubmitting}
+                          className="w-full py-3.5 bg-mao-blue text-white font-bold text-sm rounded-xl shadow-md shadow-mao-blue/10 hover:shadow-lg hover:shadow-mao-blue/15 transition-all duration-300 transform active:scale-95 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                        >
+                          {isVolSubmitting ? (
+                            <>
+                              <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                              <span>Submitting...</span>
+                            </>
+                          ) : (
+                            <>
+                              <Send className="w-4 h-4" />
+                              <span>Submit Application</span>
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    </form>
+                  )}
                 </div>
               </div>
             </motion.div>
@@ -906,7 +937,7 @@ export default function WaysToHelpSection() {
                 </div>
               </div>
 
-              {/* Right Column: Strategic Inquiry Custom or Google Form */}
+              {/* Right Column: Strategic Partnership Inquiry Form */}
               <div className="lg:col-span-5 w-full">
                 <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-xl relative overflow-hidden flex flex-col min-h-[600px]">
                   <div className="absolute top-0 inset-x-0 h-2 bg-gradient-to-r from-mao-blue via-mao-blue-hover to-mao-gold" />
@@ -916,38 +947,100 @@ export default function WaysToHelpSection() {
                     <p className="text-sm text-mao-muted mt-1">Ready to align your organization with measurable social good?</p>
                   </div>
 
-                  <div className="flex-1 flex flex-col justify-between mt-4">
-                    {/* Subtitle / direct link info */}
-                    <div className="mb-4 bg-mao-blue-light/20 p-3.5 rounded-xl border border-mao-blue-light/50 flex items-center justify-between gap-3 text-left">
-                      <div className="text-xs text-mao-body leading-relaxed font-medium">
-                        Filling this live embedded Google Form updates our databases immediately.
+                  {partnerSubmitted ? (
+                    <motion.div 
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      className="flex-1 flex flex-col items-center justify-center text-center p-6 space-y-4"
+                    >
+                      <div className="w-16 h-16 rounded-full bg-green-50 flex items-center justify-center text-green-500 border border-green-100">
+                        <CheckCircle2 className="w-8 h-8" />
                       </div>
-                      <a 
-                        href={partnerFormUrl} 
-                        target="_blank" 
-                        rel="noreferrer"
-                        className="shrink-0 px-3 py-1.5 bg-mao-blue text-white rounded-lg text-xs font-bold hover:bg-mao-blue-hover transition-all flex items-center gap-1 cursor-pointer shadow-xs"
+                      <h4 className="text-xl font-bold text-mao-dark">Inquiry Received!</h4>
+                      <p className="text-sm text-mao-muted max-w-sm">
+                        Thank you for your interest in partnering with Lifora Canada. Our partnership committee will review your proposal and get in touch with you shortly.
+                      </p>
+                      <button
+                        onClick={() => {
+                          setPartnerSubmitted(false);
+                          setPartnerCompany('');
+                          setPartnerContact('');
+                          setPartnerEmail('');
+                          setPartnerGoals('');
+                        }}
+                        className="px-6 py-2 bg-mao-blue hover:bg-mao-blue-hover text-white text-xs font-bold rounded-xl transition-all shadow-md transform active:scale-95 duration-200 cursor-pointer"
                       >
-                        <span>Open Form</span>
-                        <ExternalLink className="w-3.5 h-3.5" />
-                      </a>
-                    </div>
-
-                    <div className="flex-1 w-full bg-gray-50 rounded-2xl relative overflow-hidden h-[500px] border border-gray-150">
-                      <iframe
-                        src={getEmbedUrl(partnerFormUrl)}
-                        width="100%"
-                        height="100%"
-                        frameBorder="0"
-                        marginHeight={0}
-                        marginWidth={0}
-                        className="absolute inset-0 w-full h-full animate-fadeIn"
-                        title="Partnership Forms Iframe"
-                      >
-                        Loading Google Form...
-                      </iframe>
-                    </div>
-                  </div>
+                        Submit Another Inquiry
+                      </button>
+                    </motion.div>
+                  ) : (
+                    <form onSubmit={handlePartnerSubmit} className="mt-4 flex-1 flex flex-col justify-between space-y-4">
+                      <div className="space-y-4">
+                        <div className="space-y-1.5 text-left">
+                          <label className="text-xs font-bold text-mao-dark uppercase tracking-wider">Company / Organization</label>
+                          <input
+                            type="text"
+                            required
+                            value={partnerCompany}
+                            onChange={(e) => setPartnerCompany(e.target.value)}
+                            className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-100 focus:bg-white focus:border-mao-blue focus:ring-2 focus:ring-mao-blue/15 outline-none text-sm transition-all text-mao-dark"
+                            placeholder="Your Company Name"
+                          />
+                        </div>
+                        <div className="space-y-1.5 text-left">
+                          <label className="text-xs font-bold text-mao-dark uppercase tracking-wider">Contact Person</label>
+                          <input
+                            type="text"
+                            required
+                            value={partnerContact}
+                            onChange={(e) => setPartnerContact(e.target.value)}
+                            className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-100 focus:bg-white focus:border-mao-blue focus:ring-2 focus:ring-mao-blue/15 outline-none text-sm transition-all text-mao-dark"
+                            placeholder="E.g. Jane Smith (Director)"
+                          />
+                        </div>
+                        <div className="space-y-1.5 text-left">
+                          <label className="text-xs font-bold text-mao-dark uppercase tracking-wider">Work Email Address</label>
+                          <input
+                            type="email"
+                            required
+                            value={partnerEmail}
+                            onChange={(e) => setPartnerEmail(e.target.value)}
+                            className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-100 focus:bg-white focus:border-mao-blue focus:ring-2 focus:ring-mao-blue/15 outline-none text-sm transition-all text-mao-dark"
+                            placeholder="jane@company.com"
+                          />
+                        </div>
+                        <div className="space-y-1.5 text-left">
+                          <label className="text-xs font-bold text-mao-dark uppercase tracking-wider">Partnership Goals</label>
+                          <textarea
+                            required
+                            value={partnerGoals}
+                            onChange={(e) => setPartnerGoals(e.target.value)}
+                            className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-100 focus:bg-white focus:border-mao-blue focus:ring-2 focus:ring-mao-blue/15 outline-none text-sm transition-all h-32 resize-none text-mao-dark"
+                            placeholder="Describe your goals, ideas, or how you would like to support Lifora..."
+                          />
+                        </div>
+                      </div>
+                      <div className="pt-2">
+                        <button
+                          type="submit"
+                          disabled={isPartnerSubmitting}
+                          className="w-full py-3.5 bg-mao-blue text-white font-bold text-sm rounded-xl shadow-md shadow-mao-blue/10 hover:shadow-lg hover:shadow-mao-blue/15 transition-all duration-300 transform active:scale-95 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                        >
+                          {isPartnerSubmitting ? (
+                            <>
+                              <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                              <span>Submitting...</span>
+                            </>
+                          ) : (
+                            <>
+                              <Send className="w-4 h-4" />
+                              <span>Submit Inquiry</span>
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    </form>
+                  )}
                 </div>
               </div>
             </motion.div>

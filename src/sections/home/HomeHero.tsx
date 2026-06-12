@@ -41,7 +41,7 @@ export default function HomeHero() {
             <div className="flex flex-col sm:flex-row gap-4 max-w-md sm:max-w-none">
               <DonateButton className="text-base sm:text-lg px-6 py-3.5 sm:px-8 sm:py-4 w-full sm:w-auto" />
               <Link 
-                to="/get-involved"
+                to="/contact"
                 className="inline-flex items-center justify-center px-6 py-3.5 sm:px-8 sm:py-4 rounded-xl text-base sm:text-lg font-semibold border-2 border-white/30 text-white hover:bg-white/10 transition-all duration-300 shadow-md hover:shadow-lg transform active:scale-95 text-center cursor-pointer w-full sm:w-auto"
               >
                 Partner With Us

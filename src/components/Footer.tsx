@@ -58,7 +58,7 @@ export default function Footer() {
           <div>
             <h4 className="text-white font-bold mb-6">Quick Links</h4>
             <ul className="space-y-4">
-              {['Home', 'About Us', 'Get Involved', 'Contact'].map((link) => (
+              {['Home', 'About Us', 'Contact'].map((link) => (
                 <li key={link}>
                   <Link
                     to={link === 'Home' ? '/' : `/${link.toLowerCase().replace(' ', '-')}`}
@@ -96,7 +96,7 @@ export default function Footer() {
             <h4 className="text-white font-bold mb-6">Support Our Cause</h4>
             <p className="text-sm opacity-80 mb-6">Join our community and help us make a difference in the lives of many.</p>
             <Link
-              to="/get-involved"
+              to="/contact"
               className="block w-full bg-mao-blue text-white text-center py-3 rounded-lg font-semibold hover:bg-mao-blue-hover transition-colors"
             >
               Get Involved

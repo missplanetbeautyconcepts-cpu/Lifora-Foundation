@@ -26,7 +26,7 @@ export default function DonationCTASection() {
           </p>
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
             <Link
-              to="/get-involved"
+              to="/contact"
               className="inline-flex items-center gap-2 px-10 py-5 rounded-xl font-semibold bg-white text-mao-blue hover:bg-gray-50 text-lg transition-all duration-300 shadow-md shadow-black/5 hover:shadow-lg hover:shadow-black/10 transform active:scale-95"
             >
               Become a Volunteer
