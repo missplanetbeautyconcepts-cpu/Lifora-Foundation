@@ -1,8 +1,10 @@
+/// <reference types="vite/client" />
 import React, { useState } from 'react';
 import SectionHeader from '@/components/SectionHeader';
 import AnimatedSection from '@/components/AnimatedSection';
 import { motion, AnimatePresence } from 'motion/react';
-import { CheckCircle2, Send } from 'lucide-react';
+import { CheckCircle2, Send, AlertCircle } from 'lucide-react';
+import emailjs from '@emailjs/browser';
 
 export default function ContactFormSection() {
   const [name, setName] = useState('');
@@ -12,14 +14,47 @@ export default function ContactFormSection() {
   const [message, setMessage] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  // EmailJS Keys from environment
+  const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+  const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+  const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+
+  const isConfigured = !!(serviceId && templateId && publicKey);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    // Mimic real-time API call response lag
-    await new Promise((resolve) => setTimeout(resolve, 850));
-    setSubmitted(true);
-    setIsSubmitting(false);
+    setErrorMessage(null);
+
+    const templateParams = {
+      from_name: name,
+      from_email: email,
+      phone_number: phone,
+      contact_reason: reason,
+      message_content: message,
+    };
+
+    try {
+      if (isConfigured) {
+        await emailjs.send(serviceId, templateId, templateParams, publicKey);
+      } else {
+        // Fallback simulation mode
+        console.info(
+          "EmailJS is not fully configured (Variables needed: VITE_EMAILJS_SERVICE_ID, VITE_EMAILJS_TEMPLATE_ID, VITE_EMAILJS_PUBLIC_KEY). Simulating successful form submission."
+        );
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+      }
+      setSubmitted(true);
+    } catch (error: any) {
+      console.error('EmailJS submission failure:', error);
+      setErrorMessage(
+        error?.text || error?.message || 'Failed to submit message through EmailJS. Please check your credentials.'
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -138,7 +173,17 @@ export default function ContactFormSection() {
                       />
                     </div>
 
-                    <div className="pt-4">
+                    {errorMessage && (
+                      <div className="p-4 rounded-xl bg-red-50 border border-red-100 flex items-start gap-2.5 text-left text-red-600 text-sm">
+                        <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
+                        <div>
+                          <p className="font-semibold">Submitting Failed</p>
+                          <p className="text-xs opacity-90">{errorMessage}</p>
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="pt-4 space-y-4">
                       <button
                         type="submit"
                         disabled={isSubmitting}
@@ -156,6 +201,21 @@ export default function ContactFormSection() {
                           </>
                         )}
                       </button>
+
+                      {/* Subtle status indicator */}
+                      <div className="flex justify-center">
+                        {isConfigured ? (
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-100">
+                            <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
+                            Live EmailJS Mode Active
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-medium bg-amber-50/50 text-amber-700 border border-amber-100/60">
+                            <span className="w-1.5 h-1.5 bg-amber-400 rounded-full" />
+                            EmailJS Simulation Mode (Requires environment variables)
+                          </span>
+                        )}
+                      </div>
                     </div>
                   </form>
                 </motion.div>
